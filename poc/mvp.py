@@ -3,8 +3,7 @@ import inspect
 import traceback
 import re
 
-from memory import shortTermMemory
-
+shortTermMemory = {}
 
 suggested_code = """
 def my_function(x, y, z):
@@ -75,11 +74,18 @@ def function_logger(func):
 
             logging.warning(f'Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}')
 
+            global_dict = globals().copy()
+            local_dict = locals().copy()
+
+
             compiled_code = compile(suggested_code, '<string>', 'exec')
 
-            exec(compiled_code, input_args)
 
-            new_function = input_args[func.__name__]
+            exec(compiled_code, global_dict, local_dict)
+            new_function = local_dict[func.__name__]
+            #exec(compiled_code, input_args)
+
+            #new_function = input_args[func.__name__]
 
 
 
