@@ -14,6 +14,14 @@ def remove_wrapper_name(source_code: str) -> str:
     return source_code
 
 
+def extract_text_between_backticks(message: str) -> str:
+    start_idx = message.find("```") + 3
+    end_idx = message.rfind("```")
+    if start_idx == -1 or end_idx == -1 or start_idx >= end_idx:
+        return ""
+    return message[start_idx:end_idx].strip()
+
+
 def return_source_code(func: callable) -> str:
     source = inspect.getsource(func)
     return source
