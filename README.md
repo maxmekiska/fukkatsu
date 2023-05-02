@@ -7,7 +7,8 @@ This is a proof of concept for a library that will leverage LLMs to dynamically 
 Insane? Yes. Possible? Maybe. Fun? Definitely.
 
 
-<iframe src="https://giphy.com/embed/kNRqJCLOe6ri8" width="480" height="309" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/tire-kNRqJCLOe6ri8">via GIPHY</a></p>
+Here is a representation of what we are trying to do: https://giphy.com/gifs/tire-kNRqJCLOe6ri8/fullscreen 
+
 
 ## MVP
 
