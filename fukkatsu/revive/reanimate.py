@@ -5,7 +5,7 @@ from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.utils import (extract_text_between_backticks, remove_trace_lines,
                             remove_wrapper_name, return_input_arguments,
                             return_source_code)
-from fukkatsu.utils.llmfix import request_correction
+from fukkatsu.utils.medic import defibrillate
 
 
 def reanimate(func):
@@ -33,7 +33,7 @@ def reanimate(func):
 
             else:
                 logging.warning("Requesting correction")
-                suggested_code = request_correction()
+                suggested_code = defibrillate()
                 suggested_code = extract_text_between_backticks(suggested_code)
 
             SHORT_TERM_MEMORY[trace] = suggested_code
