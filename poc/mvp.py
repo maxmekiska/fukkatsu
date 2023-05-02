@@ -74,6 +74,8 @@ def function_logger(func):
 
             logging.warning(f'Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}')
 
+
+            
             global_dict = globals().copy()
             local_dict = locals().copy()
 
@@ -83,9 +85,7 @@ def function_logger(func):
 
             exec(compiled_code, global_dict, local_dict)
             new_function = local_dict[func.__name__]
-            #exec(compiled_code, input_args)
 
-            #new_function = input_args[func.__name__]
 
 
 
@@ -93,8 +93,6 @@ def function_logger(func):
         
 
     return wrapper
-
-
 
 
 if __name__ == "__main__":
@@ -108,4 +106,4 @@ if __name__ == "__main__":
 
     print(my_function(x = 1, y = 2, z= 2))
     print(my_function(x = 2, y = 8, z= 2))
-    print(my_function(x = 9, y = 8, z= 2))
+    print(my_function(x = 9, y = 8, z= 2) + 10 )
