@@ -7,11 +7,10 @@ shortTermMemory = {}
 
 suggested_code = """
 def my_function(x, y, z):
-    try:
-        result = x / y + z
-        return result
-    except ZeroDivisionError:
-        return None
+    if y == 0:
+        return z
+    else:
+        return x / y + z
 """
 
 def remove_trace_lines(trace_error: str) -> str:
@@ -40,7 +39,7 @@ def return_input_arguments(func: callable, *args, **kwargs) -> dict:
     return input_args
 
 
-def function_logger(func):
+def mvp_reanimate(func):
     def wrapper(*args, **kwargs):
 
 
@@ -98,12 +97,21 @@ def function_logger(func):
 if __name__ == "__main__":
 
 
-    @function_logger
+    @mvp_reanimate
     def my_function(x, y, z):
-        """function to add three variables."""
-        result = x + y + z + o
+        """
+        function to divide x by y and add to the result z. Should return z if y is 0.
+        """
+        result = x / y + z
         return result
 
-    print(my_function(x = 1, y = 2, z= 2))
-    print(my_function(x = 2, y = 8, z= 2))
-    print(my_function(x = 9, y = 8, z= 2) + 10 )
+    @mvp_reanimate
+    def my_function2(x, y):
+        """function to add two variables."""
+        result = x + y
+        return result
+
+    print(my_function(x = 1, y = 0, z= 2))
+    print(my_function(x = 2, y = 0, z= 10))
+    print(my_function(x = 9, y = 1, z= 2) + 10 )
+    print(my_function2(x = 9, y = 8) + 10 )
