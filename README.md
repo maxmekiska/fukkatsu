@@ -10,7 +10,7 @@ Insane? Yes. Possible? Maybe. Fun? Definitely.
 Here is a representation of what I am trying to do: https://giphy.com/gifs/tire-kNRqJCLOe6ri8/fullscreen 
 
 
-Please note that this concept currently applies only for scriping languages such as python and not for compiled languages such as C++. The very nature of scripting languages allows us to dynamically change the code during runtime.
+This concept currently only applies to interpreted languages such as Python and not to compiled languages such as C++. The very nature of interpreted languages allows us to dynamically change the code during runtime.
 
 ## MVP
 
