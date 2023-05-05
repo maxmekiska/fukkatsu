@@ -1,3 +1,4 @@
+import functools
 import logging
 import traceback
 
@@ -8,48 +9,73 @@ from fukkatsu.utils import (extract_text_between_backticks, remove_trace_lines,
 from fukkatsu.utils.medic import defibrillate
 
 
-def reanimate(func):
-    def wrapper(*args, **kwargs):
+def resurrect(lives=1):
+    def _resurrect(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
 
-        try:
-            result = func(*args, **kwargs)
-            return result
+            try:
+                result = func(*args, **kwargs)
+                return result
 
-        except Exception as e:
-            logging.exception(e)
-            trace = traceback.format_exc()
-            trace = remove_trace_lines(trace)
+            except Exception as e:
+                logging.exception(e)
+                trace = traceback.format_exc()
+                trace = remove_trace_lines(trace)
 
-            input_args = return_input_arguments(func, *args, **kwargs)
-            source = return_source_code(func)
-            source = remove_wrapper_name(source)
+                input_args = return_input_arguments(func, *args, **kwargs)
+                source = return_source_code(func)
+                source = remove_wrapper_name(source)
 
-            logging.warning(f"Input arguments: {input_args}")
-            logging.warning(f"\nSource Code: \n {source}")
+                logging.warning(f"Input arguments: {input_args}")
+                logging.warning(f"\nSource Code: \n {source}")
 
-            if trace in SHORT_TERM_MEMORY.keys():
-                logging.warning("Correction already in memory")
-                suggested_code = SHORT_TERM_MEMORY[trace]
+                if trace in SHORT_TERM_MEMORY.keys():
+                    logging.warning("Correction already in memory")
+                    suggested_code = SHORT_TERM_MEMORY[trace]
 
-            else:
-                logging.warning("Requesting correction")
-                suggested_code = defibrillate()
-                suggested_code = extract_text_between_backticks(suggested_code)
+                else:
+                    logging.warning("Requesting correction")
+                    suggested_code = defibrillate(
+                        inputs=input_args, faulty_function=source, error_trace=trace
+                    )
+                    suggested_code = extract_text_between_backticks(suggested_code)
 
-            SHORT_TERM_MEMORY[trace] = suggested_code
+                SHORT_TERM_MEMORY[trace] = suggested_code
 
-            logging.warning(
-                f"Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}"
-            )
+                logging.warning(
+                    f"Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}"
+                )
 
-            global_dict = globals().copy()
-            local_dict = locals().copy()
+                for i in range(lives):
+                    logging.warning(f"Attempt {i+1} to reanimate")
 
-            compiled_code = compile(suggested_code, "<string>", "exec")
+                    try:
+                        global_dict = globals().copy()
+                        local_dict = locals().copy()
 
-            exec(compiled_code, global_dict, local_dict)
-            new_function = local_dict[func.__name__]
+                        compiled_code = compile(suggested_code, "<string>", "exec")
 
-            return new_function(*args, **kwargs)
+                        exec(compiled_code, global_dict, local_dict)
+                        new_function = local_dict[func.__name__]
 
-    return wrapper
+                        return new_function(*args, **kwargs)
+                    except:
+                        logging.exception(e)
+                        trace = traceback.format_exc()
+                        trace = remove_trace_lines(trace)
+                        logging.warning("Reanimation failed, requesting new correction")
+                        suggested_code = defibrillate(
+                            inputs=input_args,
+                            faulty_function=suggested_code,
+                            error_trace=trace,
+                        )
+                        SHORT_TERM_MEMORY[trace] = suggested_code
+                        logging.warning(
+                            f"Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}"
+                        )
+                raise Exception(f"|__|__|______ {func.__name__} flatlined")
+
+        return wrapper
+
+    return _resurrect
