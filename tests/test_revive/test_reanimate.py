@@ -23,10 +23,27 @@ def my_function(x, y, z):
     if
 """
 
-mock_values = [suggested_code_fail0, suggested_code_fail1, suggested_code]
+suggested_code_fail2 = """
+def my_function(x, y, z):
+    fail here
+"""
+
+suggested_code_fail3 = """
+def my_function(x, y, z):
+    fail again
+"""
+
+mock_values0 = [suggested_code_fail0, suggested_code_fail1, suggested_code]
+mock_values1 = [
+    suggested_code_fail0,
+    suggested_code_fail1,
+    suggested_code_fail1,
+    suggested_code,
+]
+mock_values2 = [suggested_code_fail2, suggested_code_fail3, suggested_code]
 
 
-def mock_generator():
+def mock_generator(mock_values):
     while mock_values:
         put = mock_values.pop(0)
         mock_values.append(put)
@@ -56,27 +73,61 @@ def test_reanimate_one_correction_success():
         assert my_function(1, 0, 3) == 3
 
 
-def test_reanimate_three_correction_success():
+def test_reanimate_inmemory_success1():
 
-    with patch("fukkatsu.revive.reanimate.defibrillate", side_effect=mock_generator()):
+    with patch(
+        "fukkatsu.revive.reanimate.defibrillate",
+        side_effect=mock_generator(mock_values0),
+    ):
 
-        @resurrect(lives=4)
+        @resurrect(lives=2)
         def my_function(x, y, z):
             return x / y + z
 
         assert my_function(1, 0, 3) == 3
 
 
-def test_reanimate_two_failure():
+def test_reanimate_inmemory_success2():
 
-    with patch("fukkatsu.revive.reanimate.defibrillate", side_effect=mock_generator()):
+    with patch(
+        "fukkatsu.revive.reanimate.defibrillate",
+        side_effect=mock_generator(mock_values1),
+    ):
 
-        @resurrect(lives=3)
+        @resurrect(lives=2)
         def my_function(x, y, z):
             return x / y + z
+
+        assert my_function(1, 0, 3) == 3
+
+
+def test_reanimate_failure():
+
+    with patch(
+        "fukkatsu.revive.reanimate.defibrillate",
+        side_effect=mock_generator(mock_values2),
+    ):
+
+        @resurrect(lives=2)
+        def my_function(x, y, z):
+            return x + z / y
 
         with pytest.raises(Exception) as e:
             my_function(1, 0, 3)
 
         expected_error_msg = "|__|__|______ my_function flatlined"
         assert str(e.value) == expected_error_msg
+
+
+def test_reanimate_three_correction_success():
+
+    with patch(
+        "fukkatsu.revive.reanimate.defibrillate",
+        side_effect=mock_generator(mock_values2),
+    ):
+
+        @resurrect(lives=4)
+        def my_function(x, y, z):
+            return x + z / y
+
+        assert my_function(1, 0, 3) == 3

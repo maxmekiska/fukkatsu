@@ -41,12 +41,6 @@ def resurrect(lives=1):
                     )
                     suggested_code = extract_text_between_backticks(suggested_code)
 
-                SHORT_TERM_MEMORY[trace] = suggested_code
-
-                logging.warning(
-                    f"Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}"
-                )
-
                 for i in range(lives):
                     logging.warning(f"Attempt {i+1} to reanimate")
 
@@ -59,21 +53,30 @@ def resurrect(lives=1):
                         exec(compiled_code, global_dict, local_dict)
                         new_function = local_dict[func.__name__]
 
+                        SHORT_TERM_MEMORY[trace] = suggested_code
+                        logging.warning(
+                            f"Reanimation successful, using {suggested_code}"
+                        )
+
                         return new_function(*args, **kwargs)
                     except:
                         logging.exception(e)
                         trace = traceback.format_exc()
                         trace = remove_trace_lines(trace)
                         logging.warning("Reanimation failed, requesting new correction")
-                        suggested_code = defibrillate(
-                            inputs=input_args,
-                            faulty_function=suggested_code,
-                            error_trace=trace,
-                        )
-                        SHORT_TERM_MEMORY[trace] = suggested_code
-                        logging.warning(
-                            f"Short term memory: \n Suggested code: {suggested_code} \n Traceback: {trace}"
-                        )
+
+                        if trace in SHORT_TERM_MEMORY.keys():
+                            logging.warning("Correction already in memory")
+                            suggested_code = SHORT_TERM_MEMORY[trace]
+                            logging.warning(f"using {suggested_code}")
+
+                        else:
+                            suggested_code = defibrillate(
+                                inputs=input_args,
+                                faulty_function=suggested_code,
+                                error_trace=trace,
+                            )
+
                 raise Exception(f"|__|__|______ {func.__name__} flatlined")
 
         return wrapper
