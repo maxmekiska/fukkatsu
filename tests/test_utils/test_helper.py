@@ -47,11 +47,11 @@ def test_remove_wrapper_name(input_str, expected_output_str):
 @pytest.mark.parametrize(
     "message, expected_output_str",
     [
-        ("Some text before ```some code``` and some text after.", "some code"),
+        ("Some text before |||some code||| and some text after.", "some code"),
         ("This message doesn't contain backticks.", ""),
         ("A single backtick `is` not enough to extract text.", ""),
         (
-            "Backticks must be on their own line to be extracted:\n```some code```",
+            "Backticks must be on their own line to be extracted:\n|||some code|||",
             "some code",
         ),
     ],

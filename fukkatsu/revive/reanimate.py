@@ -35,11 +35,12 @@ def resurrect(lives=1):
                     suggested_code = SHORT_TERM_MEMORY[trace]
 
                 else:
-                    logging.warning("Requesting correction")
+                    logging.warning("Requesting INITIAL correction")
                     suggested_code = defibrillate(
                         inputs=input_args, faulty_function=source, error_trace=trace
                     )
                     suggested_code = extract_text_between_backticks(suggested_code)
+                    logging.warning(f"Received INITIAL suggestion: {suggested_code}")
 
                 for i in range(lives):
                     logging.warning(f"Attempt {i+1} to reanimate")
@@ -75,6 +76,12 @@ def resurrect(lives=1):
                                 inputs=input_args,
                                 faulty_function=suggested_code,
                                 error_trace=trace,
+                            )
+                            suggested_code = extract_text_between_backticks(
+                                suggested_code
+                            )
+                            logging.warning(
+                                f"Received attempt {i} suggestion: {suggested_code}"
                             )
 
                 raise Exception(f"|__|__|______ {func.__name__} flatlined")

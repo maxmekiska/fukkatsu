@@ -5,32 +5,32 @@ import pytest
 from fukkatsu.revive.reanimate import resurrect
 
 suggested_code = """
-def my_function(x, y, z):
+|||def my_function(x, y, z):
     if y == 0:
         return z
     else:
-        return x / y + z
+        return x / y + z|||
 """
 suggested_code_fail0 = """
-def my_function(x, y, z):
+|||def my_function(x, y, z):
     if y == 0:
         retur z
     else:
-        retur x / y + z
+        retur x / y + z|||
 """
 suggested_code_fail1 = """
-def my_function(x, y, z):
-    if
+|||def my_function(x, y, z):
+    if|||
 """
 
 suggested_code_fail2 = """
-def my_function(x, y, z):
-    fail here
+|||def my_function(x, y, z):
+    fail here|||
 """
 
 suggested_code_fail3 = """
-def my_function(x, y, z):
-    fail again
+|||def my_function(x, y, z):
+    fail again|||
 """
 
 mock_values0 = [suggested_code_fail0, suggested_code_fail1, suggested_code]
