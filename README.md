@@ -14,7 +14,7 @@ This concept currently only applies to interpreted languages such as Python and 
 
 ## MVP
 
-You can find a MVP within the `poc` folder. You can simpy run the code via `python mvp.py`. The code will simulate a failing function, which will be repaird during execution. The mvp.py code will not request a correction to an OpenAi LLM but simply ueses a mock corrected function.
+You can find a MVP within the `poc` folder. You can simply run the code via `python mvp.py`. The code will simulate a failing function, which will be repaird during execution. The mvp.py code will not request a correction to an OpenAi LLM but simply ueses a mock corrected function.
 
 ### Foundation
 

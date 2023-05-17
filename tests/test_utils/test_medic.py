@@ -13,7 +13,7 @@ def test_defibrillate_with_mock():
     expected_corrected_function = "def foo(x):\n    return str(x) + '1'"
 
     with patch(
-        "fukkatsu.utils.medic.openai.Completion.create"
+        "fukkatsu.utils.medic.openai.ChatCompletion.create"
     ) as mock_completion_create:
         mock_completion_create.return_value = {
             "choices": [{"message": {"content": expected_corrected_function}}]

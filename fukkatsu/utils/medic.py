@@ -11,11 +11,13 @@ CONTEXT = """Repair and improve the following faulty function: """
 
 
 def defibrillate(inputs: str, faulty_function: str, error_trace: str) -> str:
-    prompt = f"{CONTEXT}\n\n{faulty_function}\n\nThe function received the following inputs:\n\n{inputs}\n\nAnd returned the following error trace:\n\n{error_trace}\n\nRespond with exact one code box. Provide only the code of the corrected function. Do not use any additional libraries. Do not provide examples."
+    prompt = f"{CONTEXT}\n\n{faulty_function}\n\nThe function received the following inputs:\n\n{inputs}\n\nAnd returned the following error trace:\n\n{error_trace}\n\nRespond with exactly one code box. Provide only the code of the corrected function. Do not use any additional libraries. Do not provide examples."
 
-    response = openai.Completion.create(
-        engine=MODEL,
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": prompt},
+        ],
         max_tokens=1024,
         n=1,
         stop=None,
