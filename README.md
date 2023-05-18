@@ -1,5 +1,7 @@
 # fukkatsu 復活 
 
+![Fukkatsu Logo](assets/fukkatsu.png)
+
 ## Description
 
 This is a proof of concept for a library that will leverage LLMs to dynamically fix and improve code during execution. Fukkatsu is the japanese word, `復活`, for "resurrection" or "revival". Metaphorically speaking, this library will attempt to fix your cars tire while you are driving it at 300 km/h. 

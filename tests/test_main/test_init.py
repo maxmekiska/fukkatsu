@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from fukkatsu.revive.reanimate import resurrect
+from fukkatsu import resurrect
 
 suggested_code = """
 |||def my_function(x, y, z):
@@ -63,7 +63,7 @@ def test_reanimate():
 
 def test_reanimate_one_correction_success():
 
-    with patch("fukkatsu.revive.reanimate.defibrillate") as mock_defibrillate:
+    with patch("fukkatsu.defibrillate") as mock_defibrillate:
         mock_defibrillate.return_value = suggested_code
 
         @resurrect(lives=2)
@@ -76,7 +76,7 @@ def test_reanimate_one_correction_success():
 def test_reanimate_inmemory_success1():
 
     with patch(
-        "fukkatsu.revive.reanimate.defibrillate",
+        "fukkatsu.defibrillate",
         side_effect=mock_generator(mock_values0),
     ):
 
@@ -90,7 +90,7 @@ def test_reanimate_inmemory_success1():
 def test_reanimate_inmemory_success2():
 
     with patch(
-        "fukkatsu.revive.reanimate.defibrillate",
+        "fukkatsu.defibrillate",
         side_effect=mock_generator(mock_values1),
     ):
 
@@ -104,7 +104,7 @@ def test_reanimate_inmemory_success2():
 def test_reanimate_failure():
 
     with patch(
-        "fukkatsu.revive.reanimate.defibrillate",
+        "fukkatsu.defibrillate",
         side_effect=mock_generator(mock_values2),
     ):
 
@@ -122,7 +122,7 @@ def test_reanimate_failure():
 def test_reanimate_three_correction_success():
 
     with patch(
-        "fukkatsu.revive.reanimate.defibrillate",
+        "fukkatsu.defibrillate",
         side_effect=mock_generator(mock_values2),
     ):
 
