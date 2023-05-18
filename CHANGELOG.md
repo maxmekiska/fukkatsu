@@ -4,4 +4,5 @@
 
 ### 0.0.1
 
-- Proof of concept library 
+- Proof of concept library
+- implementation of `resurrect` decorator
