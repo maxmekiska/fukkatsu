@@ -1,1 +1,0 @@
-LONG_TERM_MEMORY = {}

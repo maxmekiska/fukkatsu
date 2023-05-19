@@ -1,4 +1,4 @@
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 import functools
 import logging
@@ -29,15 +29,18 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                 source = return_source_code(func)
                 source = remove_wrapper_name(source)
 
-                logging.warning(f"Input arguments: {input_args}")
-                logging.warning(f"\nSource Code: \n {source}")
+                logging.warning(f"Input arguments: {input_args}\n")
+                logging.warning(f"\nSource Code: \n {source}\n")
 
                 if trace in SHORT_TERM_MEMORY.keys():
-                    logging.warning("Correction already in memory")
+                    logging.warning("Correction already in-memory\n")
                     suggested_code = SHORT_TERM_MEMORY[trace]
+                    logging.warning(
+                        f"Using in-memory saved correction:\n{suggested_code}\n"
+                    )
 
                 else:
-                    logging.warning("Requesting INITIAL correction")
+                    logging.warning("Requesting INITIAL correction\n")
                     suggested_code = defibrillate(
                         inputs=input_args,
                         faulty_function=source,
@@ -45,14 +48,14 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                         additional_req=additional_req,
                     )
                     suggested_code = extract_text_between_backticks(suggested_code)
-                    logging.warning(f"Received INITIAL suggestion: {suggested_code}")
+                    logging.warning(f"Received INITIAL suggestion: {suggested_code}\n")
 
                 for i in range(lives):
-                    logging.warning(f"Attempt {i+1} to reanimate")
+                    logging.warning(f"Attempt {i+1} to reanimate\n")
 
                     try:
-                        global_dict = globals().copy()
-                        local_dict = locals().copy()
+                        global_dict = globals()
+                        local_dict = locals()
 
                         compiled_code = compile(suggested_code, "<string>", "exec")
 
@@ -61,20 +64,25 @@ def resurrect(lives: int = 1, additional_req: str = ""):
 
                         SHORT_TERM_MEMORY[trace] = suggested_code
                         logging.warning(
-                            f"Reanimation successful, using {suggested_code}"
+                            f"Reanimation successful, using {suggested_code}\n"
                         )
+                        locals()[func.__name__] = new_function
 
                         return new_function(*args, **kwargs)
                     except:
                         logging.exception(e)
                         trace = traceback.format_exc()
                         trace = remove_trace_lines(trace)
-                        logging.warning("Reanimation failed, requesting new correction")
+                        logging.warning(
+                            "Reanimation failed, requesting new correction\n"
+                        )
 
                         if trace in SHORT_TERM_MEMORY.keys():
-                            logging.warning("Correction already in memory")
+                            logging.warning("Correction already in-memory\n")
                             suggested_code = SHORT_TERM_MEMORY[trace]
-                            logging.warning(f"using {suggested_code}")
+                            logging.warning(
+                                f"Using in-memory saved correction:\n{suggested_code}\n"
+                            )
 
                         else:
                             suggested_code = defibrillate(
@@ -87,7 +95,7 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                                 suggested_code
                             )
                             logging.warning(
-                                f"Received attempt {i} suggestion: {suggested_code}"
+                                f"Received attempt {i} suggestion: {suggested_code}\n"
                             )
 
                 raise Exception(f"|__|__|______ {func.__name__} flatlined")
