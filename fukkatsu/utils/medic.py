@@ -2,7 +2,9 @@ import os
 
 import openai
 
-from fukkatsu.utils.prompt import ADDITIONAL, CONTEXT, OUTPUT_CONSTRAINTS
+from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
+                                   OUTPUT_CONSTRAINTS,
+                                   OUTPUT_CONSTRAINTS_MUTATE)
 
 try:
     openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -43,3 +45,25 @@ def defibrillate(
     corrected_function = response["choices"][0]["message"]["content"].strip()
 
     return corrected_function
+
+
+def enhance(inputs: str, target_function: str, request: str = "") -> str:
+    set_prompt = (
+        f"{CONTEXT_MUTATE}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
+        f"{inputs}\n\nThe user requests the following:\n{request}\n{OUTPUT_CONSTRAINTS_MUTATE}"
+    )
+
+    response = openai.ChatCompletion.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": set_prompt},
+        ],
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.1,
+    )
+
+    mutated_function = response["choices"][0]["message"]["content"].strip()
+
+    return mutated_function

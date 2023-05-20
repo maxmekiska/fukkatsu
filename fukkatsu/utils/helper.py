@@ -1,3 +1,4 @@
+import ast
 import inspect
 import re
 
@@ -32,3 +33,42 @@ def return_input_arguments(func: callable, *args, **kwargs) -> dict:
     bound_args = signature.bind(*args, **kwargs)
     input_args = {k: bound_args.arguments[k] for k in signature.parameters.keys()}
     return input_args
+
+
+def extract_imports(code_block: str) -> str:
+    parsed_code = ast.parse(code_block)
+    import_statements = []
+    for node in ast.walk(parsed_code):
+        if isinstance(node, ast.Import):
+            import_names = [
+                f"import {name.name}"
+                if name.asname is None
+                else f"import {name.name} as {name.asname}"
+                for name in node.names
+            ]
+            import_statements.extend(import_names)
+        elif isinstance(node, ast.ImportFrom):
+            module_name = (
+                node.module if node.level == 0 else "." * node.level + node.module
+            )
+            import_names = [
+                f"from {module_name} import {name.name}"
+                if name.asname is None
+                else f"from {module_name} import {name.name} as {name.asname}"
+                for name in node.names
+            ]
+            import_statements.extend(import_names)
+
+    import_block = "\n    ".join(import_statements)
+    return import_block
+
+
+def insert_string_after_colon(function_string: str, string_to_insert: str) -> str:
+    colon_index = function_string.index(":")
+    return (
+        function_string[: colon_index + 1]
+        + "\n"
+        + "    "
+        + string_to_insert
+        + function_string[colon_index + 1 :]
+    )
