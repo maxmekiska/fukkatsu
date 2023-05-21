@@ -36,6 +36,7 @@ def return_input_arguments(func: callable, *args, **kwargs) -> dict:
 
 
 def extract_imports(code_block: str) -> str:
+    """Extract all import statements from a code block."""
     parsed_code = ast.parse(code_block)
     import_statements = []
     for node in ast.walk(parsed_code):
@@ -59,7 +60,7 @@ def extract_imports(code_block: str) -> str:
             ]
             import_statements.extend(import_names)
 
-    import_block = "\n    ".join(import_statements)
+    import_block = "\n".join(["    " + statement for statement in import_statements])
     return import_block
 
 
@@ -68,7 +69,6 @@ def insert_string_after_colon(function_string: str, string_to_insert: str) -> st
     return (
         function_string[: colon_index + 1]
         + "\n"
-        + "    "
         + string_to_insert
         + function_string[colon_index + 1 :]
     )

@@ -4,6 +4,90 @@ import pytest
 
 from fukkatsu.utils.helper import *
 
+example_code_one = """import numpy as np
+import matplotlib.pyplot as plt
+import random
+import pandas as pd
+from fukkatsu.uitls import test
+
+def my_mutated_function(x, y):
+    '''
+    This function prints 'Nice weather' if called with any inputs. If x is an even integer, a random matplotlib plot is created. If y is odd, a numpy array is created.
+    '''
+    print("Nice weather")
+    if x % 2 == 0:
+        plt.plot([random.random() for i in range(10)])
+        plt.show()
+    if y % 2 != 0:
+        np_array = np.array([1, 2, 3])
+        print(np_array)
+"""
+
+example_code_two = """import numpy as np
+import matplotlib.pyplot as plt
+
+import random
+
+
+import pandas as pd
+
+from fukkatsu.uitls import test
+def my_mutated_function(x, y):
+    '''
+    This function prints 'Nice weather' if called with any inputs. If x is an even integer, a random matplotlib plot is created. If y is odd, a numpy array is created.
+    '''
+    print("Nice weather")
+    if x % 2 == 0:
+        plt.plot([random.random() for i in range(10)])
+        plt.show()
+    if y % 2 != 0:
+        np_array = np.array([1, 2, 3])
+        print(np_array)
+"""
+
+
+example_code_three = """def my_mutated_function(x, y):
+    '''
+    This function prints 'Nice weather' if called with any inputs. If x is an even integer, a random matplotlib plot is created. If y is odd, a numpy array is created.
+    '''
+    print("Nice weather")
+    if x % 2 == 0:
+        plt.plot([random.random() for i in range(10)])
+        plt.show()
+    if y % 2 != 0:
+        np_array = np.array([1, 2, 3])
+        print(np_array)
+"""
+
+example_insert_one = """def my_mutated_function(x, y):
+    '''
+    Testing.
+    '''
+    print("Nice weather")
+
+my_mutated_function(2,2)
+"""
+
+
+example_code_imports_one = "    import numpy as np\n    import matplotlib.pyplot as plt\n    import random\n    import pandas as pd\n    from fukkatsu.uitls import test"
+example_code_imports_two = "    import numpy as np\n    import matplotlib.pyplot as plt\n    import random\n    import pandas as pd\n    from fukkatsu.uitls import test"
+example_code_imports_three = ""
+
+
+example_inserted_function_one = """def my_mutated_function(x, y):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import random
+    import pandas as pd
+    from fukkatsu.uitls import test
+    '''
+    Testing.
+    '''
+    print("Nice weather")
+
+my_mutated_function(2,2)
+"""
+
 
 @pytest.mark.parametrize(
     "input_str, expected_output_str",
@@ -76,3 +160,31 @@ def test_return_input_arguments():
     expected_output_dict = {"x": 1, "y": 2}
 
     assert return_input_arguments(example_function, 1, 2) == expected_output_dict
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_output_str",
+    [
+        (
+            example_code_one,
+            example_code_imports_one,
+        ),
+        (
+            example_code_two,
+            example_code_imports_two,
+        ),
+        (
+            example_code_three,
+            example_code_imports_three,
+        ),
+    ],
+)
+def test_extract_imports(input_str, expected_output_str):
+    assert extract_imports(input_str) == expected_output_str
+
+
+def test_insert_string_after_colon():
+    assert (
+        insert_string_after_colon(example_insert_one, example_code_imports_one)
+        == example_inserted_function_one
+    )
