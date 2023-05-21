@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from fukkatsu import resurrect
+from fukkatsu.memory.manage import *
 
 suggested_code = """
 |||def my_function(x, y, z):
@@ -14,23 +15,23 @@ suggested_code = """
 suggested_code_fail0 = """
 |||def my_function(x, y, z):
     if y == 0:
-        retur z
+        return x/y + y + z
     else:
         retur x / y + z|||
 """
 suggested_code_fail1 = """
 |||def my_function(x, y, z):
-    if|||
+    return x / y|||
 """
 
 suggested_code_fail2 = """
 |||def my_function(x, y, z):
-    fail here|||
+    return x / y + z + z|||
 """
 
 suggested_code_fail3 = """
 |||def my_function(x, y, z):
-    fail again|||
+    return x / y + y|||
 """
 
 mock_values0 = [suggested_code_fail0, suggested_code_fail1, suggested_code]
@@ -120,6 +121,7 @@ def test_reanimate_failure():
 
 
 def test_reanimate_three_correction_success():
+    reset_memory()
 
     with patch(
         "fukkatsu.defibrillate",

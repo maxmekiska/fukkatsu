@@ -52,6 +52,14 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                     suggested_code = extract_text_between_backticks(suggested_code)
                     logging.warning(f"Received INITIAL suggestion: {suggested_code}\n")
 
+                    import_block = extract_imports(suggested_code)
+                    suggested_code = insert_string_after_colon(
+                        suggested_code, import_block
+                    )
+                    logging.warning(
+                        f"Import block added to suggested code:\n {suggested_code}\n"
+                    )
+
                 for i in range(lives):
                     logging.warning(f"Attempt {i+1} to reanimate\n")
 
@@ -98,6 +106,14 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                             )
                             logging.warning(
                                 f"Received attempt {i} suggestion: {suggested_code}\n"
+                            )
+
+                            import_block = extract_imports(suggested_code)
+                            suggested_code = insert_string_after_colon(
+                                suggested_code, import_block
+                            )
+                            logging.warning(
+                                f"Import block added to suggested code:\n {suggested_code}\n"
                             )
 
                 raise Exception(f"|__|__|______ {func.__name__} flatlined")
