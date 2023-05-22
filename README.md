@@ -33,6 +33,7 @@ Here is a representation of what I am trying to do: https://giphy.com/gifs/tire-
 
 This concept currently only applies to interpreted languages such as Python and not to compiled languages such as C++. The very nature of interpreted languages allows us to dynamically change the code during runtime.
 
+Furthermore, fukkatsu introduces a method to enhance ordinary functions with the power of LLMs. By decorating ordinary functions with natural language prompts, they can now dynamically adapt to unforeseen inputs.
 
 ## MVP
 
@@ -196,4 +197,28 @@ WARNING:root:Reanimation successful, using def my_function(x, y, z):
 1002
 1002
 ```
+</details>
+
+
+## fukkatsu 0.0.2
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+The `mutate` decorator introduces a new way to enhance ordinary functions dynamically via the power of LLMs, enabling them to adapt to specific inputs. It provides users with the ability to extend the capabilities of functions through natural language prompts. Additionally, the decorator can be further extended using the `resurrect` decorator. The `mutate` decorator enables users to program and account for cases that are challenging or impossible to anticipate.
+
+```python
+@resurrect(lives=1)
+@mutate(request= "Check the inputs closely. Given the inputs, make sure that the function is able to handle different formats if neccessary")
+def my_mutated_function(file_path: str) -> pd.DataFrame():
+    """
+    function to read files and output a dataframes.
+    """
+    pd.read_csv(file_path)
+    
+my_mutated_function("test_file.xlsx")
+```
+
+
 </details>
