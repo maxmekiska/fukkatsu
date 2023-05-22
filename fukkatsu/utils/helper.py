@@ -65,10 +65,15 @@ def extract_imports(code_block: str) -> str:
 
 
 def insert_string_after_colon(function_string: str, string_to_insert: str) -> str:
-    colon_index = function_string.index(":")
+    pattern = r"def.*\(.*\).*:"
+    match = re.search(pattern, function_string)
+    if not match:
+        return function_string
+
+    pattern_index = match.end()
     return (
-        function_string[: colon_index + 1]
+        function_string[:pattern_index]
         + "\n"
         + string_to_insert
-        + function_string[colon_index + 1 :]
+        + function_string[pattern_index:]
     )
