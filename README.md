@@ -112,7 +112,7 @@ fukkatsu 0.0.1 incorporates all the features demonstrated within the MVP section
 
 
 ```python
-@resurrect(lives=1, additional_req = "multiply any result by 1000")
+@resurrect(lives=1, additional_req = "add to any result 1000")
 def my_function(x, y, z):
     """
     function to divide x by y and add to the result z. Should return z if y is 0.
