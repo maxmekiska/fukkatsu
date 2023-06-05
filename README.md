@@ -112,7 +112,7 @@ fukkatsu 0.0.1 incorporates all the features demonstrated within the MVP section
 
 
 ```python
-@resurrect(lives=1, additional_req = "multiply any result by 1000")
+@resurrect(lives=1, additional_req = "add to any result 1000")
 def my_function(x, y, z):
     """
     function to divide x by y and add to the result z. Should return z if y is 0.
@@ -219,10 +219,7 @@ def my_mutated_function(file_path: str) -> pd.DataFrame():
     
 my_mutated_function("test_file.xlsx")
 ```
-
-
 </details>
-
 
 ## fukkatsu 0.0.3 - `Laissez-faire`
 
@@ -243,6 +240,4 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
 def mutate(request: str = "", allow_installs: bool = False):
   ...
 ```
-
-
 </details>
