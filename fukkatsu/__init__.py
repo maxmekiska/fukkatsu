@@ -1,19 +1,19 @@
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
-import ast
 import functools
 import logging
 import traceback
 
 from fukkatsu.memory import SHORT_TERM_MEMORY
-from fukkatsu.utils import (extract_imports, extract_text_between_backticks,
+from fukkatsu.utils import (check_and_install_libraries, extract_imports,
+                            extract_text_between_backticks,
                             insert_string_after_colon, remove_trace_lines,
                             remove_wrapper_name, return_input_arguments,
                             return_source_code)
 from fukkatsu.utils.medic import defibrillate, enhance
 
 
-def resurrect(lives: int = 1, additional_req: str = ""):
+def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = False):
     def _resurrect(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -49,10 +49,18 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                         error_trace=trace,
                         additional_req=additional_req,
                     )
+                    logging.warning(
+                        f"Received INITIAL RAW suggestion: {suggested_code}\n"
+                    )
                     suggested_code = extract_text_between_backticks(suggested_code)
-                    logging.warning(f"Received INITIAL suggestion: {suggested_code}\n")
+                    logging.warning(
+                        f"Received INITIAL CLEANED suggestion: {suggested_code}\n"
+                    )
 
                     import_block = extract_imports(suggested_code)
+                    if allow_installs == True:
+                        check_and_install_libraries(import_statements=import_block)
+
                     suggested_code = insert_string_after_colon(
                         suggested_code, import_block
                     )
@@ -101,14 +109,22 @@ def resurrect(lives: int = 1, additional_req: str = ""):
                                 error_trace=trace,
                                 additional_req=additional_req,
                             )
+                            logging.warning(
+                                f"Received attempt RAW suggestion: {suggested_code}\n"
+                            )
                             suggested_code = extract_text_between_backticks(
                                 suggested_code
                             )
                             logging.warning(
-                                f"Received attempt {i} suggestion: {suggested_code}\n"
+                                f"Received attempt CLEANED suggestion: {suggested_code}\n"
                             )
 
                             import_block = extract_imports(suggested_code)
+                            if allow_installs == True:
+                                check_and_install_libraries(
+                                    import_statements=import_block
+                                )
+
                             suggested_code = insert_string_after_colon(
                                 suggested_code, import_block
                             )
@@ -123,7 +139,7 @@ def resurrect(lives: int = 1, additional_req: str = ""):
     return _resurrect
 
 
-def mutate(request: str = ""):
+def mutate(request: str = "", allow_installs: bool = False):
     def _mutate(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -141,13 +157,17 @@ def mutate(request: str = ""):
                 target_function=source,
                 request=request,
             )
+            logging.warning(f"Received RAW suggestion mutation: {suggested_code}\n")
             suggested_code = extract_text_between_backticks(suggested_code)
-            logging.warning(f"Received suggestion mutation: {suggested_code}\n")
+            logging.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
 
             global_dict = globals()
             local_dict = locals()
 
             import_block = extract_imports(suggested_code)
+            if allow_installs == True:
+                check_and_install_libraries(import_statements=import_block)
+
             suggested_code = insert_string_after_colon(suggested_code, import_block)
             logging.warning(
                 f"Import block added to suggested code:\n {suggested_code}\n"

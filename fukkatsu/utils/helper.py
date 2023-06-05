@@ -1,6 +1,10 @@
 import ast
+import importlib
 import inspect
+import logging
 import re
+import subprocess
+import sys
 
 
 def remove_trace_lines(trace_error: str) -> str:
@@ -77,3 +81,33 @@ def insert_string_after_colon(function_string: str, string_to_insert: str) -> st
         + string_to_insert
         + function_string[pattern_index:]
     )
+
+
+def check_and_install_libraries(import_statements: str) -> None:
+    missing_libraries = []
+
+    for line in import_statements.split("\n"):
+        line = line.strip()
+        if line.startswith("import"):
+            statement = line.split(" ")[1]
+        elif line.startswith("from"):
+            statement = line.split(" ")[1].split(".")[0]
+        else:
+            continue
+
+        try:
+            importlib.import_module(statement)
+        except ImportError:
+            missing_libraries.append(statement)
+
+    if missing_libraries:
+        logging.warning(f"Missing libraries: {', '.join(missing_libraries)}\n")
+        install_libraries(missing_libraries)
+
+
+def install_libraries(libraries: str) -> None:
+    for library in libraries:
+        logging.warning(f"Installing library {library}\n")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", library])
+
+    logging.warning(f"Libraries installed successfully\n")

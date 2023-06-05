@@ -101,7 +101,7 @@ The above example will allow the LLM to attempt to fix the function twice. If th
 </details>
 
 
-## fukkatsu 0.0.1
+## fukkatsu 0.0.1 - `Extra Life`
 
 <details>
   <summary>Expand</summary>
@@ -200,7 +200,7 @@ WARNING:root:Reanimation successful, using def my_function(x, y, z):
 </details>
 
 
-## fukkatsu 0.0.2
+## fukkatsu 0.0.2 - `The Ghost in the Machine`
 
 <details>
   <summary>Expand</summary>
@@ -218,6 +218,30 @@ def my_mutated_function(file_path: str) -> pd.DataFrame():
     pd.read_csv(file_path)
     
 my_mutated_function("test_file.xlsx")
+```
+
+
+</details>
+
+
+## fukkatsu 0.0.3 - `Laissez-faire`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+The `mutate` and `resurrect` decorators now support a new argument called allow_installs. By default, `allow_installs` is set to `False`. However, when set to `True`, the LLM will be able to test whether suggested or used python libraries are installed on the system. If any of the libraries are not installed, the LLM will install them before continuing code execution. This argument enables the LLM to have even more freedom. Therefore, setting the argument to True should be considered carefully.
+
+### `resurrect`
+```python
+def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = False):
+  ...
+```
+
+### `mutate`
+```python
+def mutate(request: str = "", allow_installs: bool = False):
+  ...
 ```
 
 
