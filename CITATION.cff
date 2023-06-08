@@ -1,0 +1,24 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: fukkatsu
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Maximilian Alexander
+    family-names: Mekiska
+    email: maxmekiska@gmail.com
+repository-code: 'https://github.com/maxmekiska/fukkatsu/tree/main'
+abstract: >-
+  Proof of concept python library that leverages LLMs to
+  dynamically fix, mutate and improve code during run time.
+keywords:
+  - LLM
+  - ML
+license: MIT
+commit: 8f4d53f00cc825c3869270fe3d40e60e89c9387e
+version: 0.0.3
+date-released: '2023-06-05'
