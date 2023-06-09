@@ -24,8 +24,19 @@ def standardize_delimiters(code_block: str) -> str:
     return re.sub(pattern, "|||", code_block)
 
 
+def add_delimiters(message: str) -> str:
+    message = message.rstrip()
+    if message.endswith("|||"):
+        return message
+    elif message.count("|||") == 2:
+        return message
+    else:
+        return message + "|||"
+
+
 def extract_text_between_backticks(message: str) -> str:
     message = standardize_delimiters(message)
+    message = add_delimiters(message)
     start_idx = message.find("|||") + 3
     end_idx = message.rfind("|||")
     if start_idx == -1 or end_idx == -1 or start_idx >= end_idx:
