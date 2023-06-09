@@ -19,7 +19,13 @@ def remove_wrapper_name(source_code: str) -> str:
     return source_code
 
 
+def standardize_delimiters(code_block: str) -> str:
+    pattern = r"\|*\s*(?:python):?\|*"
+    return re.sub(pattern, "|||", code_block)
+
+
 def extract_text_between_backticks(message: str) -> str:
+    message = standardize_delimiters(message)
     start_idx = message.find("|||") + 3
     end_idx = message.rfind("|||")
     if start_idx == -1 or end_idx == -1 or start_idx >= end_idx:
