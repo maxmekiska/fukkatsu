@@ -20,7 +20,10 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
             input_args = return_input_arguments(func, *args, **kwargs)
 
             try:
-                result = func(*args, **kwargs)
+                args_copy = tuple(args)
+                kwargs_copy = kwargs.copy()
+                result = func(*args_copy, **kwargs_copy)
+
                 return result
 
             except Exception as e:
@@ -86,7 +89,11 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                         )
                         locals()[func.__name__] = new_function
 
-                        return new_function(*args, **kwargs)
+                        args_copy = tuple(args)
+                        kwargs_copy = kwargs.copy()
+
+                        return new_function(*args_copy, **kwargs_copy)
+
                     except:
                         logging.exception(e)
                         trace = traceback.format_exc()
