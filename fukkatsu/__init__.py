@@ -1,5 +1,6 @@
 __version__ = "0.0.3"
 
+import copy
 import functools
 import logging
 import traceback
@@ -20,8 +21,8 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
             input_args = return_input_arguments(func, *args, **kwargs)
 
             try:
-                args_copy = tuple(args)
-                kwargs_copy = kwargs.copy()
+                args_copy = copy.deepcopy(args)
+                kwargs_copy = copy.deepcopy(kwargs)
                 result = func(*args_copy, **kwargs_copy)
 
                 return result
@@ -89,8 +90,8 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                         )
                         locals()[func.__name__] = new_function
 
-                        args_copy = tuple(args)
-                        kwargs_copy = kwargs.copy()
+                        args_copy = copy.deepcopy(args)
+                        kwargs_copy = copy.deepcopy(kwargs)
 
                         return new_function(*args_copy, **kwargs_copy)
 
