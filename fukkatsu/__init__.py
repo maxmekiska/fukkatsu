@@ -17,6 +17,7 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
     def _resurrect(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            input_args = return_input_arguments(func, *args, **kwargs)
 
             try:
                 result = func(*args, **kwargs)
@@ -27,7 +28,6 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                 trace = traceback.format_exc()
                 trace = remove_trace_lines(trace)
 
-                input_args = return_input_arguments(func, *args, **kwargs)
                 source = return_source_code(func)
                 source = remove_wrapper_name(source)
 
