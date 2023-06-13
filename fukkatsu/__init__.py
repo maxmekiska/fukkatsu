@@ -1,4 +1,4 @@
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 import copy
 import functools
@@ -7,7 +7,7 @@ import traceback
 
 from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.utils import (check_and_install_libraries, extract_imports,
-                            extract_text_between_backticks,
+                            extract_text_between_pipes,
                             insert_string_after_colon, remove_trace_lines,
                             remove_wrapper_name, return_input_arguments,
                             return_source_code)
@@ -56,7 +56,7 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                     logging.warning(
                         f"Received INITIAL RAW suggestion: {suggested_code}\n"
                     )
-                    suggested_code = extract_text_between_backticks(suggested_code)
+                    suggested_code = extract_text_between_pipes(suggested_code)
                     logging.warning(
                         f"Received INITIAL CLEANED suggestion: {suggested_code}\n"
                     )
@@ -120,9 +120,7 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                             logging.warning(
                                 f"Received attempt RAW suggestion: {suggested_code}\n"
                             )
-                            suggested_code = extract_text_between_backticks(
-                                suggested_code
-                            )
+                            suggested_code = extract_text_between_pipes(suggested_code)
                             logging.warning(
                                 f"Received attempt CLEANED suggestion: {suggested_code}\n"
                             )
@@ -166,7 +164,7 @@ def mutate(request: str = "", allow_installs: bool = False):
                 request=request,
             )
             logging.warning(f"Received RAW suggestion mutation: {suggested_code}\n")
-            suggested_code = extract_text_between_backticks(suggested_code)
+            suggested_code = extract_text_between_pipes(suggested_code)
             logging.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
 
             global_dict = globals()

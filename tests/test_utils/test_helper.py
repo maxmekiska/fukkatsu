@@ -141,7 +141,7 @@ def test_remove_wrapper_name(input_str, expected_output_str):
     ],
 )
 def test_extract_text_between_backticks(message, expected_output_str):
-    assert extract_text_between_backticks(message) == expected_output_str
+    assert extract_text_between_pipes(message) == expected_output_str
 
 
 def example_function(x, y):
@@ -188,3 +188,28 @@ def test_insert_string_after_colon():
         insert_string_after_colon(example_insert_one, example_code_imports_one)
         == example_inserted_function_one
     )
+
+
+@pytest.mark.parametrize(
+    "message, expected_output_str",
+    [
+        ("python||def test():\npass", "|||def test():\npass"),
+        ("python||def test()\npass", "|||def test()\npass"),
+        ("|||def test()\npass|||", "|||def test()\npass|||"),
+        ("def test()\npass|||", "def test()\npass|||"),
+    ],
+)
+def test_standardize_delimiters(message, expected_output_str):
+    assert standardize_delimiters(message) == expected_output_str
+
+
+@pytest.mark.parametrize(
+    "message, expected_output_str",
+    [
+        ("|||def test():\npass|||", "|||def test():\npass|||"),
+        ("|||def test():\npass", "|||def test():\npass|||"),
+        ("|||def test():\n    1 | 0", "|||def test():\n    1 | 0|||"),
+    ],
+)
+def test_add_delimiters(message, expected_output_str):
+    assert add_delimiters(message) == expected_output_str

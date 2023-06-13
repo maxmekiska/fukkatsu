@@ -34,7 +34,7 @@ def add_delimiters(message: str) -> str:
         return message + "|||"
 
 
-def extract_text_between_backticks(message: str) -> str:
+def extract_text_between_pipes(message: str) -> str:
     message = standardize_delimiters(message)
     message = add_delimiters(message)
     start_idx = message.find("|||") + 3
