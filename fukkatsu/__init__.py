@@ -11,10 +11,17 @@ from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             insert_string_after_colon, remove_trace_lines,
                             remove_wrapper_name, return_input_arguments,
                             return_source_code)
-from fukkatsu.utils.medic import defibrillate, enhance
+from fukkatsu.utils.medic import defibrillate, enhance, twin
 
 
-def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = False):
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
     def _resurrect(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -51,14 +58,25 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                         inputs=input_args,
                         faulty_function=source,
                         error_trace=trace,
+                        model=llm["primary"],
+                        temperature=temperature["primary"],
                         additional_req=additional_req,
                     )
                     logging.warning(
-                        f"Received INITIAL RAW suggestion: {suggested_code}\n"
+                        f"Received INITIAL RAW suggestion:\n{suggested_code}\n"
                     )
+                    if active_twin == True:
+                        logging.warning("Requesting TWIN review\n")
+                        suggested_code = twin(
+                            inputs=input_args,
+                            target_function=suggested_code,
+                            model=llm["secondary"],
+                            temperature=temperature["secondary"],
+                        )
+                        logging.warning(f"TWIN review complete:\n{suggested_code}")
                     suggested_code = extract_text_between_pipes(suggested_code)
                     logging.warning(
-                        f"Received INITIAL CLEANED suggestion: {suggested_code}\n"
+                        f"Received INITIAL CLEANED suggestion:\n{suggested_code}\n"
                     )
 
                     import_block = extract_imports(suggested_code)
@@ -86,7 +104,7 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
 
                         SHORT_TERM_MEMORY[trace] = suggested_code
                         logging.warning(
-                            f"Reanimation successful, using {suggested_code}\n"
+                            f"Reanimation successful, using:\n{suggested_code}\n"
                         )
                         locals()[func.__name__] = new_function
 
@@ -115,14 +133,28 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
                                 inputs=input_args,
                                 faulty_function=suggested_code,
                                 error_trace=trace,
+                                model=llm["primary"],
+                                temperature=temperature["primary"],
                                 additional_req=additional_req,
                             )
                             logging.warning(
-                                f"Received attempt RAW suggestion: {suggested_code}\n"
+                                f"Received attempt RAW suggestion:\n{suggested_code}\n"
                             )
+
+                            if active_twin == True:
+                                logging.warning("Requesting TWIN review\n")
+                                suggested_code = twin(
+                                    inputs=input_args,
+                                    target_function=suggested_code,
+                                    model=llm["secondary"],
+                                    temperature=temperature["secondary"],
+                                )
+                                logging.warning(
+                                    f"TWIN review complete:\n{suggested_code}"
+                                )
                             suggested_code = extract_text_between_pipes(suggested_code)
                             logging.warning(
-                                f"Received attempt CLEANED suggestion: {suggested_code}\n"
+                                f"Received attempt CLEANED suggestion:\n{suggested_code}\n"
                             )
 
                             import_block = extract_imports(suggested_code)
@@ -145,7 +177,13 @@ def resurrect(lives: int = 1, additional_req: str = "", allow_installs: bool = F
     return _resurrect
 
 
-def mutate(request: str = "", allow_installs: bool = False):
+def mutate(
+    request: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
     def _mutate(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -161,9 +199,21 @@ def mutate(request: str = "", allow_installs: bool = False):
             suggested_code = enhance(
                 inputs=input_args,
                 target_function=source,
+                model=llm["primary"],
+                temperature=temperature["primary"],
                 request=request,
             )
-            logging.warning(f"Received RAW suggestion mutation: {suggested_code}\n")
+            logging.warning(f"Received RAW suggestion mutation:\n{suggested_code}\n")
+
+            if active_twin == True:
+                logging.warning("Requesting TWIN review:\n")
+                suggested_code = twin(
+                    inputs=input_args,
+                    target_function=suggested_code,
+                    model=llm["secondary"],
+                    temperature=temperature["secondary"],
+                )
+                logging.warning(f"TWIN review complete:\n{suggested_code}")
             suggested_code = extract_text_between_pipes(suggested_code)
             logging.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
 

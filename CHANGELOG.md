@@ -23,3 +23,8 @@
 - fixed a bug that caused input variables to be modified if a function performs in-place operations. I have added a deepcopy of the arguments
 - changed the name of `extract_text_between_backticks` to `extract_text_between_pipes`
 - added additional functions for response sanitation in LLM: `standardize_delimiters` and `add_delimiters`, which handle edge case answers from LLM
+
+### 0.0.5
+
+- added control arguments for OpenAi model and temperature
+- added `twin` for review capabilities

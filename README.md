@@ -242,7 +242,44 @@ def mutate(request: str = "", allow_installs: bool = False):
 ```
 </details>
 
-## Testing Capabilities
+
+## fukkatsu 0.0.5 - `Not so Evil Twin`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+The `mutate` and `resurrect` decorators now support new arguments `active_twin`, `llm`, and `temperature`. By default, `active_twin` is set to `False`, `llm` is set to `{"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"}`, and `temperature` is set to `{"primary": 0.1, "secondary": 0.1}`. This allows the user to configure the two decorators in a more granular way.
+
+If `active_twin` is set to `True`, another LLM, the `TWIN`, will crosscheck the answer of the first LLM and make corrections if deemed necessary. This is highly experimental but might become very powerful as soon as more diverse LLMs become available.
+
+### `resurrect`
+```python
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
+  ...
+```
+
+### `mutate`
+```python
+def mutate(
+    request: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
+  ...
+```
+</details>
+
+## Testing and measuring fukkatsu's Capabilities
 
 The following section delves into a series of simulations aimed at gaining a deeper understanding of fukkatsu's potential capabilities.
 
