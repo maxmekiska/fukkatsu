@@ -19,6 +19,6 @@ keywords:
   - LLM
   - ML
 license: MIT
-commit: 8f4d53f00cc825c3869270fe3d40e60e89c9387e
-version: 0.0.3
-date-released: '2023-06-05'
+commit: 67c0fc9 
+version: 0.0.4
+date-released: '2023-06-13'
