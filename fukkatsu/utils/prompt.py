@@ -24,7 +24,7 @@ OUTPUT_CONSTRAINTS = (
     "1. Respond with exactly one code box.\n"
     "2. Provide only the code of the corrected function.\n"
     "3. Do not provide examples or comments.\n"
-    "4. Make sure to prefix the requested python code with: ||| exactly and suffix the code with: ||| exactly.\n"
+    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified.\n"
     "5. When providing the corrected function, make sure to implement all additional logic explained in the faulty functions docstring.\n"
 )
 
@@ -34,7 +34,7 @@ OUTPUT_CONSTRAINTS_MUTATE = (
     "1. Respond with exactly one code box.\n"
     "2. Provide only the code of the changed function.\n"
     "3. Do not provide examples or comments.\n"
-    "4. Make sure to prefix the requested python code with: ||| exactly and suffix the code with: ||| exactly.\n"
+    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified.\n"
     "5. Make sure to write a docstring for the function that explains the original and additional functionality.\n"
 )
 
