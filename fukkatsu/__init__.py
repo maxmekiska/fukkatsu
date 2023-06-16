@@ -6,6 +6,7 @@ import logging
 import traceback
 
 from fukkatsu.memory import SHORT_TERM_MEMORY
+from fukkatsu.observer.tracker import track
 from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             extract_text_between_pipes,
                             insert_string_after_colon, remove_trace_lines,
@@ -35,25 +36,25 @@ def resurrect(
                 return result
 
             except Exception as e:
-                logging.exception(e)
+                track.exception(e)
                 trace = traceback.format_exc()
                 trace = remove_trace_lines(trace)
 
                 source = return_source_code(func)
                 source = remove_wrapper_name(source)
 
-                logging.warning(f"Input arguments: {input_args}\n")
-                logging.warning(f"\nSource Code: \n {source}\n")
+                track.warning(f"Input arguments: {input_args}\n")
+                track.warning(f"\nSource Code: \n {source}\n")
 
                 if trace in SHORT_TERM_MEMORY.keys():
-                    logging.warning("Correction already in-memory\n")
+                    track.warning("Correction already in-memory\n")
                     suggested_code = SHORT_TERM_MEMORY[trace]
-                    logging.warning(
+                    track.warning(
                         f"Using in-memory saved correction:\n{suggested_code}\n"
                     )
 
                 else:
-                    logging.warning("Requesting INITIAL correction\n")
+                    track.warning("Requesting INITIAL correction\n")
                     suggested_code = defibrillate(
                         inputs=input_args,
                         faulty_function=source,
@@ -62,20 +63,20 @@ def resurrect(
                         temperature=temperature["primary"],
                         additional_req=additional_req,
                     )
-                    logging.warning(
+                    track.warning(
                         f"Received INITIAL RAW suggestion:\n{suggested_code}\n"
                     )
                     if active_twin == True:
-                        logging.warning("Requesting TWIN review\n")
+                        track.warning("Requesting TWIN review\n")
                         suggested_code = twin(
                             inputs=input_args,
                             target_function=suggested_code,
                             model=llm["secondary"],
                             temperature=temperature["secondary"],
                         )
-                        logging.warning(f"TWIN review complete:\n{suggested_code}")
+                        track.warning(f"TWIN review complete:\n{suggested_code}")
                     suggested_code = extract_text_between_pipes(suggested_code)
-                    logging.warning(
+                    track.warning(
                         f"Received INITIAL CLEANED suggestion:\n{suggested_code}\n"
                     )
 
@@ -86,12 +87,12 @@ def resurrect(
                     suggested_code = insert_string_after_colon(
                         suggested_code, import_block
                     )
-                    logging.warning(
+                    track.warning(
                         f"Import block added to suggested code:\n {suggested_code}\n"
                     )
 
                 for i in range(lives):
-                    logging.warning(f"Attempt {i+1} to reanimate\n")
+                    track.warning(f"Attempt {i+1} to reanimate\n")
 
                     try:
                         global_dict = globals()
@@ -103,7 +104,7 @@ def resurrect(
                         new_function = local_dict[func.__name__]
 
                         SHORT_TERM_MEMORY[trace] = suggested_code
-                        logging.warning(
+                        track.warning(
                             f"Reanimation successful, using:\n{suggested_code}\n"
                         )
                         locals()[func.__name__] = new_function
@@ -114,17 +115,15 @@ def resurrect(
                         return new_function(*args_copy, **kwargs_copy)
 
                     except:
-                        logging.exception(e)
+                        track.exception(e)
                         trace = traceback.format_exc()
                         trace = remove_trace_lines(trace)
-                        logging.warning(
-                            "Reanimation failed, requesting new correction\n"
-                        )
+                        track.warning("Reanimation failed, requesting new correction\n")
 
                         if trace in SHORT_TERM_MEMORY.keys():
-                            logging.warning("Correction already in-memory\n")
+                            track.warning("Correction already in-memory\n")
                             suggested_code = SHORT_TERM_MEMORY[trace]
-                            logging.warning(
+                            track.warning(
                                 f"Using in-memory saved correction:\n{suggested_code}\n"
                             )
 
@@ -137,23 +136,23 @@ def resurrect(
                                 temperature=temperature["primary"],
                                 additional_req=additional_req,
                             )
-                            logging.warning(
+                            track.warning(
                                 f"Received attempt RAW suggestion:\n{suggested_code}\n"
                             )
 
                             if active_twin == True:
-                                logging.warning("Requesting TWIN review\n")
+                                track.warning("Requesting TWIN review\n")
                                 suggested_code = twin(
                                     inputs=input_args,
                                     target_function=suggested_code,
                                     model=llm["secondary"],
                                     temperature=temperature["secondary"],
                                 )
-                                logging.warning(
+                                track.warning(
                                     f"TWIN review complete:\n{suggested_code}"
                                 )
                             suggested_code = extract_text_between_pipes(suggested_code)
-                            logging.warning(
+                            track.warning(
                                 f"Received attempt CLEANED suggestion:\n{suggested_code}\n"
                             )
 
@@ -166,7 +165,7 @@ def resurrect(
                             suggested_code = insert_string_after_colon(
                                 suggested_code, import_block
                             )
-                            logging.warning(
+                            track.warning(
                                 f"Import block added to suggested code:\n {suggested_code}\n"
                             )
 
@@ -192,10 +191,10 @@ def mutate(
             source = return_source_code(func)
             source = remove_wrapper_name(source)
 
-            logging.warning(f"Input arguments: {input_args}\n")
-            logging.warning(f"\nSource Code: \n {source}\n")
+            track.warning(f"Input arguments: {input_args}\n")
+            track.warning(f"\nSource Code: \n {source}\n")
 
-            logging.warning("Requesting mutation\n")
+            track.warning("Requesting mutation\n")
             suggested_code = enhance(
                 inputs=input_args,
                 target_function=source,
@@ -203,19 +202,19 @@ def mutate(
                 temperature=temperature["primary"],
                 request=request,
             )
-            logging.warning(f"Received RAW suggestion mutation:\n{suggested_code}\n")
+            track.warning(f"Received RAW suggestion mutation:\n{suggested_code}\n")
 
             if active_twin == True:
-                logging.warning("Requesting TWIN review:\n")
+                track.warning("Requesting TWIN review:\n")
                 suggested_code = twin(
                     inputs=input_args,
                     target_function=suggested_code,
                     model=llm["secondary"],
                     temperature=temperature["secondary"],
                 )
-                logging.warning(f"TWIN review complete:\n{suggested_code}")
+                track.warning(f"TWIN review complete:\n{suggested_code}")
             suggested_code = extract_text_between_pipes(suggested_code)
-            logging.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
+            track.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
 
             global_dict = globals()
             local_dict = locals()
@@ -225,16 +224,14 @@ def mutate(
                 check_and_install_libraries(import_statements=import_block)
 
             suggested_code = insert_string_after_colon(suggested_code, import_block)
-            logging.warning(
-                f"Import block added to suggested code:\n {suggested_code}\n"
-            )
+            track.warning(f"Import block added to suggested code:\n {suggested_code}\n")
 
             compiled_code = compile(suggested_code, "<string>", "exec")
 
             exec(compiled_code, global_dict, local_dict)
             new_function = local_dict[func.__name__]
 
-            logging.warning(f"Mutation successful, using {suggested_code}\n")
+            track.warning(f"Mutation successful, using {suggested_code}\n")
             locals()[func.__name__] = new_function
 
             return new_function(*args, **kwargs)
