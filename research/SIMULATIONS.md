@@ -50,7 +50,7 @@ print("Expected counts:", expected)
 You can see each simulation recored in the different jupyter notebooks contained within the `research` directory.
 
 
-| Error Type | Error Name | Success | Failure |    Date    |   Version  | Commit ID | p-value | Rjected H<sub>0</sub> |
+| Error Type | Error Name | Success | Failure |    Date    |   Version  | Commit ID | p-value | Rejected H<sub>0</sub> |
 |------------|------------|---------|---------|------------|------------|-----------|---------|--------               |
 | Type A     |   Parse Error  |   -    |   -     | - |   -     |   -  |             |          |                 |
 | Type B     |   Type Error  |   -     |   -    | - |   -     |   -  |               |          |                |
