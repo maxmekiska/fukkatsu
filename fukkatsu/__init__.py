@@ -103,16 +103,19 @@ def resurrect(
                         exec(compiled_code, global_dict, local_dict)
                         new_function = local_dict[func.__name__]
 
-                        SHORT_TERM_MEMORY[trace] = suggested_code
-                        track.warning(
-                            f"Reanimation successful, using:\n{suggested_code}\n"
-                        )
                         locals()[func.__name__] = new_function
 
                         args_copy = copy.deepcopy(args)
                         kwargs_copy = copy.deepcopy(kwargs)
 
-                        return new_function(*args_copy, **kwargs_copy)
+                        output = new_function(*args_copy, **kwargs_copy)
+
+                        SHORT_TERM_MEMORY[trace] = suggested_code
+                        track.warning(
+                            f"Reanimation successful, using:\n{suggested_code}\n"
+                        )
+
+                        return output
 
                     except:
                         track.exception(e)
@@ -231,10 +234,13 @@ def mutate(
             exec(compiled_code, global_dict, local_dict)
             new_function = local_dict[func.__name__]
 
-            track.warning(f"Mutation successful, using {suggested_code}\n")
             locals()[func.__name__] = new_function
 
-            return new_function(*args, **kwargs)
+            output = new_function(*args, **kwargs)
+
+            track.warning(f"Mutation successful, using {suggested_code}\n")
+
+            return output
 
         return wrapper
 
