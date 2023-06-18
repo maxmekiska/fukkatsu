@@ -36,3 +36,4 @@
     - short-term-memory will now only save functions that executed successfully
 - live counter fix
     - removed unintended extra live
+- logging formatting enhanced + api call logging added
