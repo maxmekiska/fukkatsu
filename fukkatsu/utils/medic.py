@@ -2,6 +2,7 @@ import os
 
 import openai
 
+from fukkatsu.observer.tracker import track
 from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    CONTEXT_TWIN, OUTPUT_CONSTRAINTS,
                                    OUTPUT_CONSTRAINTS_MUTATE,
@@ -34,7 +35,7 @@ def defibrillate(
             f"{inputs}\n\nAnd returned the following error trace:\n\n{error_trace}\n\n{OUTPUT_CONSTRAINTS}\n"
             f"{ADDITIONAL}{additional_req}"
         )
-
+    track.warning(f"API REQUEST to {model}")
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
@@ -59,6 +60,7 @@ def enhance(
         f"{inputs}\n\nThe user requests the following:\n{request}\n{OUTPUT_CONSTRAINTS_MUTATE}"
     )
 
+    track.warning(f"API REQUEST to {model}")
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
@@ -86,6 +88,7 @@ def twin(
         f"{inputs}\n\n{OUTPUT_CONSTRAINTS_TWIN}"
     )
 
+    track.warning(f"API REQUEST to {model}")
     response = openai.ChatCompletion.create(
         model=model,
         messages=[

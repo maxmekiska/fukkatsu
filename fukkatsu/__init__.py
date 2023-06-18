@@ -2,7 +2,6 @@ __version__ = "0.0.6"
 
 import copy
 import functools
-import logging
 import traceback
 
 from fukkatsu.memory import SHORT_TERM_MEMORY
