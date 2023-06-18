@@ -1,4 +1,4 @@
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 import copy
 import functools
@@ -92,8 +92,7 @@ def resurrect(
 
                 for i in range(lives):
 
-                    if i != lives - 1:
-                        track.warning(f"Attempt {i+2} to reanimate\n")
+                    track.warning(f"Attempt {i+1} to reanimate\n")
 
                     try:
                         global_dict = globals()

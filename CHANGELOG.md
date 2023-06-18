@@ -37,3 +37,7 @@
 - live counter fix
     - removed unintended extra live
 - logging formatting enhanced + api call logging added
+
+### 0.0.7
+
+- fix of "Attempt `x` to reanimate" logging message
