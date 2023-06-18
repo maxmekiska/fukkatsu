@@ -1,4 +1,4 @@
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import copy
 import functools
@@ -54,7 +54,7 @@ def resurrect(
                     )
 
                 else:
-                    track.warning("Requesting INITIAL correction\n")
+                    track.warning("Requesting INITIAL correction - Attempt 1\n")
                     suggested_code = defibrillate(
                         inputs=input_args,
                         faulty_function=source,
@@ -91,8 +91,36 @@ def resurrect(
                         f"Import block added to suggested code:\n {suggested_code}\n"
                     )
 
-                for i in range(lives):
-                    track.warning(f"Attempt {i+1} to reanimate\n")
+                if lives == 1:
+                    try:
+                        global_dict = globals()
+                        local_dict = locals()
+
+                        compiled_code = compile(suggested_code, "<string>", "exec")
+
+                        exec(compiled_code, global_dict, local_dict)
+                        new_function = local_dict[func.__name__]
+
+                        locals()[func.__name__] = new_function
+
+                        args_copy = copy.deepcopy(args)
+                        kwargs_copy = copy.deepcopy(kwargs)
+
+                        output = new_function(*args_copy, **kwargs_copy)
+
+                        SHORT_TERM_MEMORY[trace] = suggested_code
+                        track.warning(
+                            f"Reanimation successful, using:\n{suggested_code}\n"
+                        )
+
+                        return output
+
+                    except Exception as e:
+                        track.exception(e)
+                        track.warning("Reanimation failed\n")
+
+                for i in range(lives - 1):
+                    track.warning(f"Attempt {i+2} to reanimate\n")
 
                     try:
                         global_dict = globals()
@@ -117,7 +145,7 @@ def resurrect(
 
                         return output
 
-                    except:
+                    except Exception as e:
                         track.exception(e)
                         trace = traceback.format_exc()
                         trace = remove_trace_lines(trace)

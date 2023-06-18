@@ -29,3 +29,10 @@
 - added control arguments for OpenAi model and temperature
 - added `twin` for review capabilities
 - improved prompt clarity on code indicator tags `|||`
+
+### 0.0.6
+
+- short-term-memory fix
+    - short-term-memory will now only save functions that executed successfully
+- live counter fix
+    - removed unintended extra live
