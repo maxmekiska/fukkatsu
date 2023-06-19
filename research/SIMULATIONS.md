@@ -50,7 +50,7 @@ print("Expected counts:", expected)
 You can see each simulation recored in the different jupyter notebooks contained within the `research` directory.
 
 
-| Error Type | Error Name | Success | Failure |    Date    |   Version  | Commit ID | p-value | Rejected H<sub>0</sub> |
-|------------|------------|---------|---------|------------|------------|-----------|---------|--------               |
-| Type A     |   Parse Error  |   -    |   -     | - |   -     |   -  |             |          |                 |
-| Type B     |   Type Error  |   -     |   -    | - |   -     |   -  |               |          |                |
+| Error Type | Error Name | Success | Failure |    Date    |   Version  | Commit ID | p-value | alpha |Rejected H<sub>0</sub> |
+|------------|------------|---------|---------|------------|------------|-----------|---------|--------|-------|
+|UnicodeDecodeError |  [Parser Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/siumlationNotebooks/fukkatsuParserError.ipynb) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
+| Type B     |   Type Error  |   -     |   -    | - |   -     |   -  |        -       |   -       |   -  | 
