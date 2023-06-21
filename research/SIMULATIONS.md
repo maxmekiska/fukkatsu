@@ -23,8 +23,8 @@ You can see each simulation recored in the different jupyter notebooks contained
 
 | Error Type | Error Name | Success | Failure |    Date    |   Version  | Commit ID | p-value | alpha |Rejected H<sub>0</sub> |
 |------------|------------|---------|---------|------------|------------|-----------|---------|--------|-------|
-|UnicodeDecodeError |  [Parser Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuParserError.html) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
-| TypeError |   [Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuTypeError.html)  |   38     |   12    | 19/06/23 |   0.0.7     |2903c2a|   0.00015293200080179759 | 0.05 |  Yes  | 
+|UnicodeDecodeError |  [Parser Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuParserError.ipynb) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
+| TypeError |   [Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuTypeError.ipynb)  |   38     |   12    | 19/06/23 |   0.0.7     |2903c2a|   0.00015293200080179759 | 0.05 |  Yes  | 
 
 ### H<sub>0</sub> Rejection Plots
 
