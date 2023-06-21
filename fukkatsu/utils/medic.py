@@ -4,7 +4,8 @@ import openai
 
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
-                                   CONTEXT_TWIN, OUTPUT_CONSTRAINTS,
+                                   CONTEXT_STALKER, CONTEXT_TWIN,
+                                   OUTPUT_CONSTRAINTS,
                                    OUTPUT_CONSTRAINTS_MUTATE,
                                    OUTPUT_CONSTRAINTS_TWIN)
 
@@ -103,3 +104,38 @@ def twin(
     mutated_function = response["choices"][0]["message"]["content"].strip()
 
     return mutated_function
+
+
+def stalker(
+    inputs: str,
+    function: str,
+    model: str,
+    temperature: float,
+    additional_req: str = "",
+) -> str:
+    if additional_req == "":
+        set_prompt = (
+            f"{CONTEXT_STALKER}\n\n{function}\n\nThe function received the following inputs:\n\n"
+            f"{inputs}\n\n{OUTPUT_CONSTRAINTS}\n"
+        )
+    else:
+        set_prompt = (
+            f"{CONTEXT}\n\n{function}\n\nThe function received the following inputs:\n\n"
+            f"{inputs}\n\n{OUTPUT_CONSTRAINTS}\n"
+            f"{ADDITIONAL}{additional_req}"
+        )
+    track.warning(f"API REQUEST to {model}")
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": set_prompt},
+        ],
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=temperature,
+    )
+
+    corrected_function = response["choices"][0]["message"]["content"].strip()
+
+    return corrected_function

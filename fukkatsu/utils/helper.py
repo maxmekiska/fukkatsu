@@ -2,9 +2,12 @@ import ast
 import importlib
 import inspect
 import logging
+import random
 import re
 import subprocess
 import sys
+
+from fukkatsu.observer.tracker import track
 
 
 def remove_trace_lines(trace_error: str) -> str:
@@ -118,13 +121,36 @@ def check_and_install_libraries(import_statements: str) -> None:
             missing_libraries.append(statement)
 
     if missing_libraries:
-        logging.warning(f"Missing libraries: {', '.join(missing_libraries)}\n")
+        track.warning(f"Missing libraries: {', '.join(missing_libraries)}\n")
         install_libraries(missing_libraries)
 
 
-def install_libraries(libraries: str) -> None:
+def install_libraries(libraries: list) -> None:
     for library in libraries:
-        logging.warning(f"Installing library {library}\n")
+        track.warning(f"Installing library {library}\n")
         subprocess.check_call([sys.executable, "-m", "pip", "install", library])
 
-    logging.warning(f"Libraries installed successfully\n")
+    track.warning(f"Libraries installed successfully\n")
+
+
+def sampler(likelihood: float) -> bool:
+    "Function that returns True or False depending on the likelihood provided. A higher likelihood indicates a bigger chances of returning True."
+    random_number = random.random()
+    track.warning(f"Random number: {random_number}, Likelihood: {likelihood}")
+
+    if random_number < likelihood:
+        return True
+    else:
+        return False
+
+
+def rename_function(function_string: str, new_name: str) -> str:
+    pattern = r"def\s+([a-zA-Z_]\w*)\s*\("
+    match = re.search(pattern, function_string)
+
+    if match:
+        renamed_function = re.sub(pattern, f"def {new_name}(", function_string)
+        return renamed_function
+    else:
+        track.warning(f"Could not rename function {function_string}")
+        return function_string

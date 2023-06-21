@@ -279,6 +279,18 @@ def mutate(
 ```
 </details>
 
+
+## fukkatsu 0.0.8 - `I can see you`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+Coming soon.
+
+</details>
+
+
 ## Testing and measuring fukkatsu's Capabilities
 
 The following section delves into a series of simulations aimed at gaining a deeper understanding of fukkatsu's potential capabilities.

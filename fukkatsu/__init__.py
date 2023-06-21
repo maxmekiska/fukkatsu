@@ -1,4 +1,4 @@
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 import copy
 import functools
@@ -9,9 +9,10 @@ from fukkatsu.observer.tracker import track
 from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             extract_text_between_pipes,
                             insert_string_after_colon, remove_trace_lines,
-                            remove_wrapper_name, return_input_arguments,
-                            return_source_code)
-from fukkatsu.utils.medic import defibrillate, enhance, twin
+                            remove_wrapper_name, rename_function,
+                            return_input_arguments, return_source_code,
+                            sampler)
+from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
 
 
 def resurrect(
@@ -74,6 +75,10 @@ def resurrect(
                             temperature=temperature["secondary"],
                         )
                         track.warning(f"TWIN review complete:\n{suggested_code}")
+                        suggested_code = rename_function(suggested_code, func.__name__)
+                        track.warning(
+                            f"Twin Safeguard: Function name changed to {suggested_code}\n"
+                        )
                     suggested_code = extract_text_between_pipes(suggested_code)
                     track.warning(
                         f"Received INITIAL CLEANED suggestion:\n{suggested_code}\n"
@@ -158,6 +163,13 @@ def resurrect(
                                 track.warning(
                                     f"TWIN review complete:\n{suggested_code}"
                                 )
+                                suggested_code = rename_function(
+                                    suggested_code, func.__name__
+                                )
+                                track.warning(
+                                    f"Twin Safeguard: Function name changed to {suggested_code}\n"
+                                )
+
                             suggested_code = extract_text_between_pipes(suggested_code)
                             track.warning(
                                 f"Received attempt CLEANED suggestion:\n{suggested_code}\n"
@@ -220,6 +232,11 @@ def mutate(
                     temperature=temperature["secondary"],
                 )
                 track.warning(f"TWIN review complete:\n{suggested_code}")
+                suggested_code = rename_function(suggested_code, func.__name__)
+                track.warning(
+                    f"Twin Safeguard: Function name changed to {suggested_code}\n"
+                )
+                track.warning(f"TWIN review complete:\n{suggested_code}")
             suggested_code = extract_text_between_pipes(suggested_code)
             track.warning(f"Received CLEANED suggestion mutation: {suggested_code}\n")
 
@@ -249,3 +266,83 @@ def mutate(
         return wrapper
 
     return _mutate
+
+
+def stalk(
+    likelihood: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
+    def _stalk(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+
+            if sampler(likelihood) == False:
+                track.warning(
+                    "Continue without reviewing function, using original function\n"
+                )
+                return func(*args, **kwargs)
+
+            input_args = return_input_arguments(func, *args, **kwargs)
+            source = return_source_code(func)
+            source = remove_wrapper_name(source)
+
+            track.warning(f"Input arguments: {input_args}\n")
+            track.warning(f"\nSource Code: \n {source}\n")
+
+            track.warning("Stalking function\n")
+            suggested_code = stalker(
+                inputs=input_args,
+                function=source,
+                model=llm["primary"],
+                temperature=temperature["primary"],
+                additional_req=additional_req,
+            )
+            track.warning(f"Received RAW suggestion from Stalker:\n{suggested_code}\n")
+
+            if active_twin == True:
+                track.warning("Requesting TWIN review:\n")
+                suggested_code = twin(
+                    inputs=input_args,
+                    target_function=suggested_code,
+                    model=llm["secondary"],
+                    temperature=temperature["secondary"],
+                )
+                track.warning(f"TWIN review complete:\n{suggested_code}")
+                suggested_code = rename_function(suggested_code, func.__name__)
+                track.warning(
+                    f"Twin Safeguard: Function name changed to {suggested_code}\n"
+                )
+
+            suggested_code = extract_text_between_pipes(suggested_code)
+            track.warning(f"Received CLEANED suggestion review: {suggested_code}\n")
+
+            global_dict = globals()
+            local_dict = locals()
+
+            import_block = extract_imports(suggested_code)
+            if allow_installs == True:
+                check_and_install_libraries(import_statements=import_block)
+
+            suggested_code = insert_string_after_colon(suggested_code, import_block)
+            track.warning(f"Import block added to suggested code:\n {suggested_code}\n")
+
+            compiled_code = compile(suggested_code, "<string>", "exec")
+
+            exec(compiled_code, global_dict, local_dict)
+            new_function = local_dict[func.__name__]
+
+            locals()[func.__name__] = new_function
+
+            output = new_function(*args, **kwargs)
+
+            track.warning(f"Review successful, using {suggested_code}\n")
+
+            return output
+
+        return wrapper
+
+    return _stalk
