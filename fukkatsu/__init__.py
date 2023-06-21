@@ -269,7 +269,7 @@ def mutate(
 
 
 def stalk(
-    likelihood: int = 1,
+    likelihood: float = 1,
     additional_req: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,

@@ -286,9 +286,677 @@ def mutate(
   <summary>Expand</summary>
   <br>
 
-Coming soon.
+This release features a new decorator called `stalk`. The `stalk` decorator enables you to quality-check your functions during runtime. Stalk will randomly execute when your target function is called. The primary objective is to check if your target functions are still working as intended during your program execution. If stalk deems your function as behaving illogically, stalk will perform modifications and enhancements similar to the `mutate` decorator. You can decide how frequent stalk will check a particular function by setting the likelihood parameter. By default, the likelihood parameter is set to 1. A value of 1 indicates that stalk will quality-check the function every time it is called. A value of 0.5 indicates that stalk will quality-check the function half of the time it is called.
+
+
+### `stalk`
+```python
+def stalk(
+    likelihood: float = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
+    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+):
+  ...
+```
+
 
 </details>
+
+
+
+## Samples - `Synthetic` Code in Action
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+### `resurrect` - Twin not active
+
+
+```python
+file_path = "status_field.xlsx"
+
+@resurrect(lives=3, additional_req = "make sure that the function returns a DataFrame", allow_installs = True, active_twin = False)
+def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+read_file(file_path)
+```
+
+#### logs
+
+
+<details>
+  <summary>Show Full Logs</summary>
+  <br>
+
+```
+2023-06-22 00:16:37,701 - 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
+Traceback (most recent call last):
+  File "c:\users\max\documents\research\fukkatsu\fukkatsu\fukkatsu\__init__.py", line 34, in wrapper
+    result = func(*args_copy, **kwargs_copy)
+  File "C:\Users\Max\AppData\Local\Temp\ipykernel_9256\8051789.py", line 8, in read_file
+    df = pd.read_csv(file_path)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1679, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas\_libs\parsers.pyx", line 548, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas\_libs\parsers.pyx", line 637, in pandas._libs.parsers.TextReader._get_header
+  File "pandas\_libs\parsers.pyx", line 848, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas\_libs\parsers.pyx", line 859, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "pandas\_libs\parsers.pyx", line 2017, in pandas._libs.parsers.raise_parser_error
+UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
+2023-06-22 00:16:37,705 - Input arguments: {'file_path': 'status_field.xlsx'}
+
+2023-06-22 00:16:37,705 - 
+Source Code: 
+ def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+
+2023-06-22 00:16:37,706 - Requesting INITIAL correction - Attempt 1
+
+2023-06-22 00:16:37,707 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:16:42,114 - Received INITIAL RAW suggestion:
+|||
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    """
+    Read a CSV file and return a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the CSV file.
+
+    Returns:
+        pd.DataFrame: A pandas DataFrame containing the data from the CSV file.
+    """
+    df = pd.read_csv(file_path, encoding='utf-8')
+    return df
+|||
+
+2023-06-22 00:16:42,114 - Received INITIAL CLEANED suggestion:
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    """
+    Read a CSV file and return a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the CSV file.
+
+    Returns:
+        pd.DataFrame: A pandas DataFrame containing the data from the CSV file.
+    """
+    df = pd.read_csv(file_path, encoding='utf-8')
+    return df
+
+2023-06-22 00:16:42,114 - Import block added to suggested code:
+ import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    import pandas as pd
+    """
+    Read a CSV file and return a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the CSV file.
+
+    Returns:
+        pd.DataFrame: A pandas DataFrame containing the data from the CSV file.
+    """
+    df = pd.read_csv(file_path, encoding='utf-8')
+    return df
+
+2023-06-22 00:16:42,114 - Attempt 1 to reanimate
+
+2023-06-22 00:16:42,120 - 'utf-8' codec can't decode bytes in position 0-1: invalid continuation byte
+Traceback (most recent call last):
+  File "c:\users\max\documents\research\fukkatsu\fukkatsu\fukkatsu\__init__.py", line 34, in wrapper
+    result = func(*args_copy, **kwargs_copy)
+  File "C:\Users\Max\AppData\Local\Temp\ipykernel_9256\8051789.py", line 8, in read_file
+    df = pd.read_csv(file_path)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1679, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas\_libs\parsers.pyx", line 548, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas\_libs\parsers.pyx", line 637, in pandas._libs.parsers.TextReader._get_header
+  File "pandas\_libs\parsers.pyx", line 848, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas\_libs\parsers.pyx", line 859, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "pandas\_libs\parsers.pyx", line 2017, in pandas._libs.parsers.raise_parser_error
+UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\users\max\documents\research\fukkatsu\fukkatsu\fukkatsu\__init__.py", line 116, in wrapper
+    output = new_function(*args_copy, **kwargs_copy)
+  File "<string>", line 14, in read_file
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1679, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas\_libs\parsers.pyx", line 548, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas\_libs\parsers.pyx", line 665, in pandas._libs.parsers.TextReader._get_header
+UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 0-1: invalid continuation byte
+2023-06-22 00:16:42,124 - Reanimation failed, requesting new correction
+
+2023-06-22 00:16:42,124 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:16:45,294 - Received attempt RAW suggestion:
+|||
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    try:
+        df = pd.read_csv(file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        df = pd.read_excel(file_path)
+    return df
+|||
+
+2023-06-22 00:16:45,294 - Received attempt CLEANED suggestion:
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    try:
+        df = pd.read_csv(file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        df = pd.read_excel(file_path)
+    return df
+
+2023-06-22 00:16:45,294 - Import block added to suggested code:
+ import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    import pandas as pd
+    try:
+        df = pd.read_csv(file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        df = pd.read_excel(file_path)
+    return df
+
+2023-06-22 00:16:45,294 - Attempt 2 to reanimate
+
+2023-06-22 00:16:45,308 - Reanimation successful, using:
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    import pandas as pd
+    try:
+        df = pd.read_csv(file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        df = pd.read_excel(file_path)
+    return df
+```
+</details>
+
+#### Output
+
+```
+ID	Field	Cost	Country	Status
+0	1	Eng	200000	Germany	active
+1	1	Eng	200000	Italy	active
+2	1	Eng	200000	UK	active
+3	1	Eng	400500	US	active
+4	1	Eng	100500	Italy	active
+5	1	Eng	100500	Italy	deactivated
+6	1	Eng	100500	Spain	active
+```
+
+
+### `resurrect` - Twin active
+
+```python
+file_path = "status_field.xlsx"
+
+@resurrect(lives=3, additional_req = "make sure that the function returns a DataFrame", allow_installs = True, active_twin = True)
+def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+read_file(file_path)
+```
+
+#### logs
+
+
+<details>
+<summary>Show Full Logs</summary>
+<br>
+
+```
+2023-06-22 00:19:40,599 - 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
+Traceback (most recent call last):
+  File "c:\users\max\documents\research\fukkatsu\fukkatsu\fukkatsu\__init__.py", line 34, in wrapper
+    result = func(*args_copy, **kwargs_copy)
+  File "C:\Users\Max\AppData\Local\Temp\ipykernel_9256\423974772.py", line 8, in read_file
+    df = pd.read_csv(file_path)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\readers.py", line 1679, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "C:\Users\Max\anaconda3\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas\_libs\parsers.pyx", line 548, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas\_libs\parsers.pyx", line 637, in pandas._libs.parsers.TextReader._get_header
+  File "pandas\_libs\parsers.pyx", line 848, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas\_libs\parsers.pyx", line 859, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "pandas\_libs\parsers.pyx", line 2017, in pandas._libs.parsers.raise_parser_error
+UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
+2023-06-22 00:19:40,604 - Input arguments: {'file_path': 'status_field.xlsx'}
+
+2023-06-22 00:19:40,605 - 
+Source Code: 
+ def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+
+2023-06-22 00:19:40,606 - Requesting INITIAL correction - Attempt 1
+
+2023-06-22 00:19:40,607 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:19:44,843 - Received INITIAL RAW suggestion:
+|||
+import pandas as pd
+
+def read_file(file_path: str) -> pd.DataFrame:
+    """Reads a CSV file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the CSV file.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the CSV file.
+    """
+    df = pd.read_csv(file_path, encoding='utf-8')
+    return df
+|||
+
+2023-06-22 00:19:44,843 - Requesting TWIN review
+
+2023-06-22 00:19:44,843 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:19:50,260 - TWIN review complete:
+|||
+import pandas as pd
+
+def read_file(file_path: str, sheet_name: str = None) -> pd.DataFrame:
+    """
+    Reads an Excel file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the Excel file.
+        sheet_name (str, optional): The name of the sheet to read. Defaults to None.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the Excel file.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    return df
+|||
+2023-06-22 00:19:50,260 - Twin Safeguard: Function name changed to |||
+import pandas as pd
+
+def read_file(file_path: str, sheet_name: str = None) -> pd.DataFrame:
+    """
+    Reads an Excel file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the Excel file.
+        sheet_name (str, optional): The name of the sheet to read. Defaults to None.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the Excel file.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    return df
+|||
+
+2023-06-22 00:19:50,260 - Received INITIAL CLEANED suggestion:
+import pandas as pd
+
+def read_file(file_path: str, sheet_name: str = None) -> pd.DataFrame:
+    """
+    Reads an Excel file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the Excel file.
+        sheet_name (str, optional): The name of the sheet to read. Defaults to None.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the Excel file.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    return df
+
+2023-06-22 00:19:50,260 - Import block added to suggested code:
+ import pandas as pd
+
+def read_file(file_path: str, sheet_name: str = None) -> pd.DataFrame:
+    import pandas as pd
+    """
+    Reads an Excel file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the Excel file.
+        sheet_name (str, optional): The name of the sheet to read. Defaults to None.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the Excel file.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    return df
+
+2023-06-22 00:19:50,260 - Attempt 1 to reanimate
+
+2023-06-22 00:19:50,275 - Reanimation successful, using:
+import pandas as pd
+
+def read_file(file_path: str, sheet_name: str = None) -> pd.DataFrame:
+    import pandas as pd
+    """
+    Reads an Excel file and returns a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the Excel file.
+        sheet_name (str, optional): The name of the sheet to read. Defaults to None.
+
+    Returns:
+        pd.DataFrame: The pandas DataFrame containing the data from the Excel file.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    return df
+```
+
+</details>
+
+#### Output
+
+```
+{'Sheet1':    ID Field    Cost  Country       Status
+ 0   1   Eng  200000  Germany       active
+ 1   1   Eng  200000    Italy       active
+ 2   1   Eng  200000      UK        active
+ 3   1   Eng  400500       US       active
+ 4   1   Eng  100500    Italy       active
+ 5   1   Eng  100500    Italy  deactivated
+ 6   1   Eng  100500    Spain       active}
+```
+
+### `mutate` - Twin not active
+
+
+```python
+file_path = "status_field.xlsx"
+
+@mutate(request="look at the input file, make sure to change the function according to the file.")
+def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+read_file(file_path)
+```
+
+#### logs
+
+
+<details>
+<summary>Show Full Logs</summary>
+<br>
+
+
+```
+2023-06-22 00:30:25,589 - Input arguments: {'file_path': 'status_field.xlsx'}
+
+2023-06-22 00:30:25,590 - 
+Source Code: 
+ def read_file(file_path: str):
+    """read file and return a data frame"""
+    df = pd.read_csv(file_path)
+    return df
+
+
+2023-06-22 00:30:25,592 - Requesting mutation
+
+2023-06-22 00:30:25,592 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:30:31,373 - Received RAW suggestion mutation:
+||| 
+import pandas as pd
+
+def read_file(file_path: str):
+    """
+    Read file and return a data frame.
+    
+    Args:
+    file_path (str): The path of the file to be read.
+    
+    Returns:
+    pandas.DataFrame: The data frame containing the data from the file.
+    """
+    if file_path.endswith('.csv'):
+        df = pd.read_csv(file_path)
+    elif file_path.endswith('.xlsx'):
+        df = pd.read_excel(file_path)
+    else:
+        raise ValueError('File format not supported. Please provide a CSV or Excel file.')
+    return df
+|||
+
+2023-06-22 00:30:31,373 - Received CLEANED suggestion mutation: import pandas as pd
+
+def read_file(file_path: str):
+    """
+    Read file and return a data frame.
+    
+    Args:
+    file_path (str): The path of the file to be read.
+    
+    Returns:
+    pandas.DataFrame: The data frame containing the data from the file.
+    """
+    if file_path.endswith('.csv'):
+        df = pd.read_csv(file_path)
+    elif file_path.endswith('.xlsx'):
+        df = pd.read_excel(file_path)
+    else:
+        raise ValueError('File format not supported. Please provide a CSV or Excel file.')
+    return df
+
+2023-06-22 00:30:31,373 - Import block added to suggested code:
+ import pandas as pd
+
+def read_file(file_path: str):
+    import pandas as pd
+    """
+    Read file and return a data frame.
+    
+    Args:
+    file_path (str): The path of the file to be read.
+    
+    Returns:
+    pandas.DataFrame: The data frame containing the data from the file.
+    """
+    if file_path.endswith('.csv'):
+        df = pd.read_csv(file_path)
+    elif file_path.endswith('.xlsx'):
+        df = pd.read_excel(file_path)
+    else:
+        raise ValueError('File format not supported. Please provide a CSV or Excel file.')
+    return df
+
+2023-06-22 00:30:31,386 - Mutation successful, using import pandas as pd
+
+def read_file(file_path: str):
+    import pandas as pd
+    """
+    Read file and return a data frame.
+    
+    Args:
+    file_path (str): The path of the file to be read.
+    
+    Returns:
+    pandas.DataFrame: The data frame containing the data from the file.
+    """
+    if file_path.endswith('.csv'):
+        df = pd.read_csv(file_path)
+    elif file_path.endswith('.xlsx'):
+        df = pd.read_excel(file_path)
+    else:
+        raise ValueError('File format not supported. Please provide a CSV or Excel file.')
+    return df
+```
+</details>
+
+#### Output
+
+```
+ID	Field	Cost	Country	Status
+0	1	Eng	200000	Germany	active
+1	1	Eng	200000	Italy	active
+2	1	Eng	200000	UK	active
+3	1	Eng	400500	US	active
+4	1	Eng	100500	Italy	active
+5	1	Eng	100500	Italy	deactivated
+6	1	Eng	100500	Spain	active
+```
+
+
+### `stalk` - Twin not active
+
+```python
+@stalk(likelihood = 0.6, additional_req = "", allow_installs = False, active_twin = False, llm = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"}, temperature = {"primary": 0.1, "secondary": 0.1})
+def my_function(x, y, z):
+    """
+    function to divide x by y and add to the result z. Should return z if y is 0.
+    """
+    result = x / y + z
+    return result
+
+print(my_function(x = 1, y = 0, z= 2))
+```
+
+#### logs
+
+<details>
+<summary>Show Full Logs</summary>
+<br>
+
+```
+2023-06-22 00:39:25,914 - Random number: 0.2695059864882857, Likelihood: 0.6
+2023-06-22 00:39:25,916 - Input arguments: {'x': 1, 'y': 0, 'z': 2}
+
+2023-06-22 00:39:25,918 - 
+Source Code: 
+ def my_function(x, y, z):
+    """
+    function to divide x by y and add to the result z. Should return z if y is 0.
+    """
+    result = x / y + z
+    return result
+
+
+2023-06-22 00:39:25,919 - Stalking function
+
+2023-06-22 00:39:25,920 - API REQUEST to gpt-3.5-turbo
+2023-06-22 00:39:30,115 - Received RAW suggestion from Stalker:
+|||
+def my_function(x, y, z):
+    """
+    This function divides x by y and adds to the result z. If y is 0, it returns z.
+    Time complexity: O(1)
+    Space complexity: O(1)
+    """
+    if y == 0:
+        return z
+    result = x / y + z
+    return result
+|||
+
+2023-06-22 00:39:30,115 - Received CLEANED suggestion review: def my_function(x, y, z):
+    """
+    This function divides x by y and adds to the result z. If y is 0, it returns z.
+    Time complexity: O(1)
+    Space complexity: O(1)
+    """
+    if y == 0:
+        return z
+    result = x / y + z
+    return result
+
+2023-06-22 00:39:30,115 - Import block added to suggested code:
+ def my_function(x, y, z):
+
+    """
+    This function divides x by y and adds to the result z. If y is 0, it returns z.
+    Time complexity: O(1)
+    Space complexity: O(1)
+    """
+    if y == 0:
+        return z
+    result = x / y + z
+    return result
+
+2023-06-22 00:39:30,115 - Review successful, using def my_function(x, y, z):
+
+    """
+    This function divides x by y and adds to the result z. If y is 0, it returns z.
+    Time complexity: O(1)
+    Space complexity: O(1)
+    """
+    if y == 0:
+        return z
+    result = x / y + z
+    return result
+```
+
+</details>
+
+#### Output
+
+```
+2
+```
+
+
+
+
+</details>
+
+
+
 
 
 ## Testing and measuring fukkatsu's Capabilities

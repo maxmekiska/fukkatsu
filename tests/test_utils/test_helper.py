@@ -213,3 +213,38 @@ def test_standardize_delimiters(message, expected_output_str):
 )
 def test_add_delimiters(message, expected_output_str):
     assert add_delimiters(message) == expected_output_str
+
+
+@pytest.mark.parametrize(
+    "likelihood, sample_answer",
+    [
+        (1.0, True),
+        (0.0, False),
+    ],
+)
+def test_sampler(likelihood, sample_answer):
+    assert sampler(likelihood) == sample_answer
+
+
+@pytest.mark.parametrize(
+    "function, new_name, expected_output_str",
+    [
+        (
+            "def calculate_square(num):\n    return num ** 2",
+            "nameTest",
+            "def nameTest(num):\n    return num ** 2",
+        ),
+        (
+            "def find_max_value(lst):\n    if len(lst) == 0:\n        return None\n    max_value = lst[0]\n    for num in lst:\n        if num > max_value:\n            max_value = num\n    return max_value",
+            "nameTest",
+            "def nameTest(lst):\n    if len(lst) == 0:\n        return None\n    max_value = lst[0]\n    for num in lst:\n        if num > max_value:\n            max_value = num\n    return max_value",
+        ),
+        (
+            "def is_palindrome(word):\n    word = word.lower()\n    return word == word[::-1]",
+            "nameTest",
+            "def nameTest(word):\n    word = word.lower()\n    return word == word[::-1]",
+        ),
+    ],
+)
+def test_rename_function(function, new_name, expected_output_str):
+    assert rename_function(function, new_name) == expected_output_str

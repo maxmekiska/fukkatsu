@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from fukkatsu.utils.medic import defibrillate, enhance
+from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
 
 
 def test_defibrillate_with_mock():
@@ -45,6 +45,51 @@ def test_enhance_with_mock():
         }
 
         corrected_function = enhance(
+            inputs, target_function, request, llm["primary"], temperature["primary"]
+        )
+
+        assert corrected_function == expected_enhanced_function
+
+
+def test_twin_with_mock():
+    inputs = "example input"
+    target_function = "def foo(x): return x + 1"
+    llm = {"primary": "gpt"}
+    temperature = {"primary": 0.5}
+
+    expected_enhanced_function = "def foo(x):\n    return str(x) + '1'"
+
+    with patch(
+        "fukkatsu.utils.medic.openai.ChatCompletion.create"
+    ) as mock_completion_create:
+        mock_completion_create.return_value = {
+            "choices": [{"message": {"content": expected_enhanced_function}}]
+        }
+
+        corrected_function = twin(
+            inputs, target_function, llm["primary"], temperature["primary"]
+        )
+
+        assert corrected_function == expected_enhanced_function
+
+
+def test_stalker_with_mock():
+    inputs = "example input"
+    target_function = "def foo(x): return x + 1"
+    request = "Enahnce the function"
+    llm = {"primary": "gpt"}
+    temperature = {"primary": 0.5}
+
+    expected_enhanced_function = "def foo(x):\n    return str(x) + '1'"
+
+    with patch(
+        "fukkatsu.utils.medic.openai.ChatCompletion.create"
+    ) as mock_completion_create:
+        mock_completion_create.return_value = {
+            "choices": [{"message": {"content": expected_enhanced_function}}]
+        }
+
+        corrected_function = stalker(
             inputs, target_function, request, llm["primary"], temperature["primary"]
         )
 
