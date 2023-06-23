@@ -41,3 +41,10 @@
 ### 0.0.7
 
 - fix of "Attempt `x` to reanimate" logging message
+
+
+### 0.0.8
+
+- new `stalk` decorator
+- increased unittest coverage
+- provided more examples in documentation
