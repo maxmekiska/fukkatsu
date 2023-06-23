@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from fukkatsu import resurrect
+from fukkatsu import mutate, resurrect, stalk
 from fukkatsu.memory.manage import *
 
 suggested_code = """
@@ -133,3 +133,72 @@ def test_reanimate_three_correction_success():
             return x + z / y
 
         assert my_function(1, 0, 3) == 3
+
+
+def test_reanimate_twin():
+
+    with patch("fukkatsu.defibrillate") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.twin") as mock_twin:
+            mock_twin.return_value = suggested_code
+
+            @resurrect(lives=1, active_twin=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
+
+
+def test_mutate():
+
+    with patch("fukkatsu.enhance") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        @mutate(request="Test Request")
+        def my_function(x, y, z):
+            return x / y + z
+
+        assert my_function(1, 0, 3) == 3
+
+
+def test_mutate_twin():
+
+    with patch("fukkatsu.enhance") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.twin") as mock_twin:
+            mock_twin.return_value = suggested_code
+
+            @mutate(request="Test Request", active_twin=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
+
+
+def test_stalk():
+
+    with patch("fukkatsu.stalker") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        @stalk(likelihood=1.0, active_twin=False)
+        def my_function(x, y, z):
+            return x / y + z
+
+        assert my_function(1, 0, 3) == 3
+
+
+def test_stalk_twin():
+
+    with patch("fukkatsu.stalker") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.twin") as mock_twin:
+            mock_twin.return_value = suggested_code
+
+            @stalk(likelihood=1.0, active_twin=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
