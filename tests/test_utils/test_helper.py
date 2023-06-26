@@ -1,4 +1,5 @@
 import re
+from unittest.mock import patch
 
 import pytest
 
@@ -190,6 +191,13 @@ def test_insert_string_after_colon():
     )
 
 
+def test_insert_string_after_colon_no_change():
+    assert (
+        insert_string_after_colon("not matching string", "import pandas as pd")
+        == "not matching string"
+    )
+
+
 @pytest.mark.parametrize(
     "message, expected_output_str",
     [
@@ -248,3 +256,33 @@ def test_sampler(likelihood, sample_answer):
 )
 def test_rename_function(function, new_name, expected_output_str):
     assert rename_function(function, new_name) == expected_output_str
+
+
+# def test_check_and_install_libraries_with_import_error():
+# with patch("importlib.import_module") as import_module_mock:
+# import_module_mock.side_effect = ImportError
+# with patch("fukkatsu.utils.helper.install_libraries") as mock_install_libraries:
+# mock_install_libraries.return_value = None
+# check_and_install_libraries("import my_library")
+
+# mock_install_libraries.assert_called_once()
+
+
+def test_check_and_install_libraries_no_error():
+    with patch("importlib.import_module") as mock_import_module, patch(
+        "fukkatsu.utils.helper.install_libraries"
+    ) as mock_install_libraries:
+        mock_import_module.return_value = None
+        check_and_install_libraries("import my_library")
+
+    mock_install_libraries.assert_not_called()
+
+
+def test_check_and_install_libraries_no_error_from_syntax():
+    with patch("importlib.import_module") as mock_import_module, patch(
+        "fukkatsu.utils.helper.install_libraries"
+    ) as mock_install_libraries:
+        mock_import_module.return_value = None
+        check_and_install_libraries("from my_library import my_function")
+
+    mock_install_libraries.assert_not_called()
