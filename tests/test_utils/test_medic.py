@@ -1,8 +1,11 @@
+import os
 from unittest.mock import patch
 
+import openai
 import pytest
 
-from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
+from fukkatsu.utils.medic import (defibrillate, enhance, set_openai_key,
+                                  stalker, twin)
 
 
 def test_defibrillate_with_mock():
@@ -125,3 +128,19 @@ def test_stalker_with_mock_additional_rquest():
         )
 
         assert corrected_function == expected_enhanced_function
+
+
+def test_set_openai_key_with_api_key():
+    with patch.dict(os.environ, {"OPENAI_API_KEY": "test_key"}):
+        set_openai_key()
+        assert openai.api_key == "test_key"
+        assert "OPENAI_API_KEY" in os.environ
+
+
+def test_set_openai_key_without_api_key():
+    with patch("os.environ.get") as import_module_mock:
+        import_module_mock.side_effect = Exception
+        with pytest.raises(
+            Exception, match="OPENAI_API_KEY not found in environment variables."
+        ):
+            set_openai_key()

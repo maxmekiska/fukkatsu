@@ -1,4 +1,4 @@
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 import copy
 import functools
@@ -12,7 +12,10 @@ from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             remove_wrapper_name, rename_function,
                             return_input_arguments, return_source_code,
                             sampler)
-from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
+from fukkatsu.utils.medic import (defibrillate, enhance, set_openai_key,
+                                  stalker, twin)
+
+set_openai_key()
 
 
 def resurrect(

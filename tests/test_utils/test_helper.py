@@ -258,14 +258,14 @@ def test_rename_function(function, new_name, expected_output_str):
     assert rename_function(function, new_name) == expected_output_str
 
 
-# def test_check_and_install_libraries_with_import_error():
-# with patch("importlib.import_module") as import_module_mock:
-# import_module_mock.side_effect = ImportError
-# with patch("fukkatsu.utils.helper.install_libraries") as mock_install_libraries:
-# mock_install_libraries.return_value = None
-# check_and_install_libraries("import my_library")
+def test_check_and_install_libraries_with_import_error():
+    with patch("importlib.import_module") as import_module_mock:
+        import_module_mock.side_effect = ImportError
+    with patch("fukkatsu.utils.helper.install_libraries") as mock_install_libraries:
+        mock_install_libraries.return_value = None
+        check_and_install_libraries("import my_library")
 
-# mock_install_libraries.assert_called_once()
+    mock_install_libraries.assert_called_once()
 
 
 def test_check_and_install_libraries_no_error():

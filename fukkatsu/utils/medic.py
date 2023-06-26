@@ -9,12 +9,15 @@ from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    OUTPUT_CONSTRAINTS_MUTATE,
                                    OUTPUT_CONSTRAINTS_TWIN)
 
-try:
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-    print("OPENAI_API_KEY found in environment variables.")
-except:
-    print("OPENAI_API_KEY not found in environment variables.")
-    raise Exception("OPENAI_API_KEY not found in environment variables.")
+
+def set_openai_key():
+    track.warning("Setting OPENAI_API_KEY")
+    try:
+        openai.api_key = os.environ.get("OPENAI_API_KEY")
+        track.warning("OPENAI_API_KEY found in environment variables.")
+    except:
+        track.error("OPENAI_API_KEY not found in environment variables.")
+        raise Exception("OPENAI_API_KEY not found in environment variables.")
 
 
 def defibrillate(

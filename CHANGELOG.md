@@ -48,3 +48,8 @@
 - new `stalk` decorator
 - increased unittest coverage
 - provided more examples in documentation
+
+### 0.0.9
+
+- improved testing
+- created new openai api key setter function
