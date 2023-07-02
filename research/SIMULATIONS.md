@@ -26,6 +26,7 @@ You can see each simulation recored in the different jupyter notebooks contained
 |UnicodeDecodeError |  [Parser Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuParserError.ipynb) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
 | TypeError |   [Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuTypeError.ipynb)  |   38     |   12    | 19/06/23 |   0.0.7     |2903c2a|   0.00015293200080179759 | 0.05 |  Yes  | 
 | ValueError |   [Parse Date Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuValueError.ipynb)  |   50     |   0    | 30/06/23 |   0.0.9     |6fe478c|  8.881784197001252e-16  | 0.05 |  Yes  | 
+| TypeError |   [API Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuApiTypeError.ipynb)  |   50     |   0    | 01/07/23 |   0.0.9     |0369c34|  8.881784197001252e-16  | 0.05 |  Yes  | 
 
 ### H<sub>0</sub> Rejection Plots
 
@@ -63,4 +64,17 @@ You can see each simulation recored in the different jupyter notebooks contained
 
 <p align="center">
   <img src="../assets/rejectionPlotValueError.png" alt="Rejection Plot Value Error" height="400">
+</p>
+
+
+#### `API Type Error`
+
+- 50 repair successes
+-  0 repair failures
+- alpha 0.05
+
+<br>
+
+<p align="center">
+  <img src="../assets/rejectionPlotValueError.png" alt="Rejection Plot API Value Error" height="400">
 </p>
