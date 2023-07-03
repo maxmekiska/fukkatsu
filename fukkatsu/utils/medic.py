@@ -17,7 +17,15 @@ def set_openai_key():
         track.warning("OPENAI_API_KEY found in environment variables.")
     except:
         track.error("OPENAI_API_KEY not found in environment variables.")
-        raise Exception("OPENAI_API_KEY not found in environment variables.")
+
+
+def overwrite_openai_key(key: str):
+    if type(key) != str:
+        track.error("Invalid Key format. OPENAI_API_KEY not overwritten.")
+        raise Exception("Invalid Key format. OPENAI_API_KEY not overwritten.")
+    else:
+        openai.api_key = key
+        track.warning("OPENAI_API_KEY overwritten.")
 
 
 def defibrillate(

@@ -52,4 +52,4 @@
 ### 0.0.9
 
 - improved testing
-- created new openai api key setter function
+- `reset_openai_key` added to overwrite openai key set by env variable

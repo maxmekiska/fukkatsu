@@ -12,10 +12,14 @@ from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             remove_wrapper_name, rename_function,
                             return_input_arguments, return_source_code,
                             sampler)
-from fukkatsu.utils.medic import (defibrillate, enhance, set_openai_key,
-                                  stalker, twin)
+from fukkatsu.utils.medic import (defibrillate, enhance, overwrite_openai_key,
+                                  set_openai_key, stalker, twin)
 
 set_openai_key()
+
+
+def reset_openai_key(key: str):
+    overwrite_openai_key(key)
 
 
 def resurrect(
