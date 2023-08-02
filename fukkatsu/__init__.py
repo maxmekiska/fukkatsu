@@ -1,9 +1,10 @@
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 
 import copy
 import functools
 import traceback
 
+from fukkatsu.llm.openaigate import reset_openai_key, set_openai_key
 from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils import (check_and_install_libraries, extract_imports,
@@ -12,14 +13,9 @@ from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             remove_wrapper_name, rename_function,
                             return_input_arguments, return_source_code,
                             sampler)
-from fukkatsu.utils.medic import (defibrillate, enhance, overwrite_openai_key,
-                                  set_openai_key, stalker, twin)
+from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
 
 set_openai_key()
-
-
-def reset_openai_key(key: str):
-    overwrite_openai_key(key)
 
 
 def resurrect(
@@ -27,8 +23,10 @@ def resurrect(
     additional_req: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
-    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
 ):
     def _resurrect(func):
         @functools.wraps(func)
@@ -66,8 +64,8 @@ def resurrect(
                         inputs=input_args,
                         faulty_function=source,
                         error_trace=trace,
-                        model=llm["primary"],
-                        temperature=temperature["primary"],
+                        model_api=primary_model_api,
+                        config=primary_config,
                         additional_req=additional_req,
                     )
                     track.warning(
@@ -78,8 +76,8 @@ def resurrect(
                         suggested_code = twin(
                             inputs=input_args,
                             target_function=suggested_code,
-                            model=llm["secondary"],
-                            temperature=temperature["secondary"],
+                            model_api=secondary_model_api,
+                            config=secondary_config,
                         )
                         track.warning(f"TWIN review complete:\n{suggested_code}")
                         suggested_code = rename_function(suggested_code, func.__name__)
@@ -151,8 +149,8 @@ def resurrect(
                                 inputs=input_args,
                                 faulty_function=suggested_code,
                                 error_trace=trace,
-                                model=llm["primary"],
-                                temperature=temperature["primary"],
+                                model_api=primary_model_api,
+                                config=primary_config,
                                 additional_req=additional_req,
                             )
                             track.warning(
@@ -164,8 +162,8 @@ def resurrect(
                                 suggested_code = twin(
                                     inputs=input_args,
                                     target_function=suggested_code,
-                                    model=llm["secondary"],
-                                    temperature=temperature["secondary"],
+                                    model_api=secondary_model_api,
+                                    config=secondary_config,
                                 )
                                 track.warning(
                                     f"TWIN review complete:\n{suggested_code}"
@@ -206,8 +204,10 @@ def mutate(
     request: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
-    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
 ):
     def _mutate(func):
         @functools.wraps(func)
@@ -224,8 +224,8 @@ def mutate(
             suggested_code = enhance(
                 inputs=input_args,
                 target_function=source,
-                model=llm["primary"],
-                temperature=temperature["primary"],
+                model_api=primary_model_api,
+                config=primary_config,
                 request=request,
             )
             track.warning(f"Received RAW suggestion mutation:\n{suggested_code}\n")
@@ -235,8 +235,8 @@ def mutate(
                 suggested_code = twin(
                     inputs=input_args,
                     target_function=suggested_code,
-                    model=llm["secondary"],
-                    temperature=temperature["secondary"],
+                    model_api=secondary_model_api,
+                    config=secondary_config,
                 )
                 track.warning(f"TWIN review complete:\n{suggested_code}")
                 suggested_code = rename_function(suggested_code, func.__name__)
@@ -280,8 +280,10 @@ def stalk(
     additional_req: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    llm: dict = {"primary": "gpt-3.5-turbo", "secondary": "gpt-3.5-turbo"},
-    temperature: dict = {"primary": 0.1, "secondary": 0.1},
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
 ):
     def _stalk(func):
         @functools.wraps(func)
@@ -304,8 +306,8 @@ def stalk(
             suggested_code = stalker(
                 inputs=input_args,
                 function=source,
-                model=llm["primary"],
-                temperature=temperature["primary"],
+                model_api=primary_model_api,
+                config=primary_config,
                 additional_req=additional_req,
             )
             track.warning(f"Received RAW suggestion from Stalker:\n{suggested_code}\n")
@@ -315,8 +317,8 @@ def stalk(
                 suggested_code = twin(
                     inputs=input_args,
                     target_function=suggested_code,
-                    model=llm["secondary"],
-                    temperature=temperature["secondary"],
+                    model_api=secondary_model_api,
+                    config=secondary_config,
                 )
                 track.warning(f"TWIN review complete:\n{suggested_code}")
                 suggested_code = rename_function(suggested_code, func.__name__)
