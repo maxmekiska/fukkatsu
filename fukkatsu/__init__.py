@@ -13,7 +13,7 @@ from fukkatsu.utils import (check_and_install_libraries, extract_imports,
                             remove_wrapper_name, rename_function,
                             return_input_arguments, return_source_code,
                             sampler)
-from fukkatsu.utils.medic import defibrillate, enhance, stalker, twin
+from fukkatsu.utils.synthesize import defibrillate, enhance, stalker, twin
 
 set_openai_key()
 

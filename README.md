@@ -306,6 +306,62 @@ def stalk(
 </details>
 
 
+## fukkatsu 0.0.10 - `Sharing is Caring`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+NOT RELEASED YET. WORK IN PROGRESS
+
+### `resurrect`
+```python
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+):
+  ...
+```
+
+### `mutate`
+```python
+def mutate(
+    request: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+):
+  ...
+```
+
+### `stalk`
+```python
+def stalk(
+    likelihood: float = 1.0,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+):
+  ...
+```
+
+
+</details>
+
+
 
 ## Samples - `Synthetic` Code in Action
 

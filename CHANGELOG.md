@@ -53,3 +53,11 @@
 
 - improved testing
 - `reset_openai_key` added to overwrite openai key set by env variable
+
+### 0.0.10
+
+- preparation for integration of other LLM model providers
+- changed arguments of:
+    - `resurrect(lives: int = 1,additional_req: str = "", allow_installs: bool = False, active_twin: bool = False, primary_model_api: str = "openai", secondary_model_api: str = "openai", primary_config: dict = {}, secondary_config: dict = {})`
+    - `mutate(request: str = "", allow_installs: bool = False, active_twin: bool = False, primary_model_api: str = "openai", secondary_model_api: str = "openai", primary_config: dict = {}, secondary_config: dict = {})`
+    - `stalk(likelihood: float = 1.0, additional_req: str = "", allow_installs: bool = False, active_twin: bool = False, primary_model_api: str = "openai", secondary_model_api: str = "openai", primary_config: dict = {}, secondary_config: dict = {})`

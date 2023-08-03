@@ -14,7 +14,7 @@ def set_openai_key():
         track.error("OPENAI_API_KEY not found in environment variables.")
 
 
-def overwrite_openai_key(key: str):
+def reset_openai_key(key: str):
     if type(key) != str:
         track.error("Invalid Key format. OPENAI_API_KEY not overwritten.")
         raise Exception("Invalid Key format. OPENAI_API_KEY not overwritten.")
@@ -23,14 +23,10 @@ def overwrite_openai_key(key: str):
         track.warning("OPENAI_API_KEY overwritten.")
 
 
-def reset_openai_key(key: str):
-    overwrite_openai_key(key)
-
-
 def request_openai_model(
     set_prompt: str,
-    model: str,
-    temperature: float,
+    model: str = "gpt-3.5-turbo",
+    temperature: float = 0.1,
     max_tokens: int = 1024,
     n: int = 1,
     stop: str = None,
