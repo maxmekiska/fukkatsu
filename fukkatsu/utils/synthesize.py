@@ -1,6 +1,5 @@
-import openai
-
-from fukkatsu.llm.openaigate import request_openai_model
+from fukkatsu.llm.openaigate import (OpenaiChatCompletionConfig,
+                                     request_openai_model)
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    CONTEXT_STALKER, CONTEXT_TWIN,
@@ -17,7 +16,7 @@ def defibrillate(
     faulty_function: str,
     error_trace: str,
     additional_req: str = "",
-    config: dict = None,
+    config: OpenaiChatCompletionConfig = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (
@@ -42,7 +41,7 @@ def enhance(
     inputs: str,
     target_function: str,
     request: str = "",
-    config: dict = None,
+    config: OpenaiChatCompletionConfig = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_MUTATE}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -60,7 +59,7 @@ def twin(
     model_api: str,
     inputs: str,
     target_function: str,
-    config: dict = None,
+    config: OpenaiChatCompletionConfig = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_TWIN}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -78,7 +77,7 @@ def stalker(
     inputs: str,
     function: str,
     additional_req: str = "",
-    config: dict = None,
+    config: OpenaiChatCompletionConfig = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (

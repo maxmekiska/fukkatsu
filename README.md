@@ -314,6 +314,8 @@ def stalk(
 
 NOT RELEASED YET. WORK IN PROGRESS
 
+This release includes new updates to the three decorators: `resurrect`, `mutate`, and `stalk`. Each decorator is now ready to support language model providers other than OpenAI in the future. To enable this, various changes have been made to the arguments. Please see below for the new arguments. By default, all models will be set to OpenAI. Support for new providers will be added as soon as they become available.
+
 ### `resurrect`
 ```python
 def resurrect(

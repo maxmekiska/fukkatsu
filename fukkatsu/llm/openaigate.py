@@ -1,8 +1,19 @@
 import os
+from dataclasses import dataclass
+from typing import Optional
 
 import openai
 
 from fukkatsu.observer.tracker import track
+
+
+@dataclass
+class OpenaiChatCompletionConfig:
+    model: str
+    temperature: float
+    max_tokens: int
+    n: int
+    stop: Optional[str]
 
 
 def set_openai_key():
