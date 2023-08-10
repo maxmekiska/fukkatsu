@@ -312,9 +312,32 @@ def stalk(
   <summary>Expand</summary>
   <br>
 
-NOT RELEASED YET. WORK IN PROGRESS
 
 This release includes new updates to the three decorators: `resurrect`, `mutate`, and `stalk`. Each decorator is now ready to support language model providers other than OpenAI in the future. To enable this, various changes have been made to the arguments. Please see below for the new arguments. By default, all models will be set to OpenAI. Support for new providers will be added as soon as they become available.
+
+
+Configurating the `openai` model API via:
+
+```python
+@dataclass
+class OpenaiChatCompletionConfig:
+    model: str
+    temperature: float
+    max_tokens: int
+    n: int
+    stop: Optional[str]
+```
+
+The default values set for the `openai` model API:
+
+```python
+model: str = "gpt-3.5-turbo",
+temperature: float = 0.1,
+max_tokens: int = 1024,
+n: int = 1,
+stop: str = None,
+```
+
 
 ### `resurrect`
 ```python
@@ -360,6 +383,51 @@ def stalk(
   ...
 ```
 
+### Appendix: How to use fukkatsu in a python class?
+
+fukkatsu wrappers can be used in python classes in the following way:
+
+```python
+from typing import List
+import pandas as pd
+from datetime import datetime
+
+from fukkatsu import resurrect, mutate, stalk, reset_openai_key
+
+@resurrect(
+    lives=3,
+    allow_installs = True,
+    additional_req = "Account for multiple dateformats if necessary.",
+    active_twin = True,
+    primary_model_api = "openai",
+    secondary_model_api = "openai",
+    primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.88},
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.33}
+)
+def perform_data_transformation(data:list):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_format = '%Y-%m-%d'
+    
+    for idx, date in enumerate(data):
+        data[idx] = datetime.strptime(date, date_format)
+        
+    return data
+
+data = ["2023-07-07", "1 June 2020", "2023.07.07", "2023-12-01", "2020/01/01", "Nov 11 1994"]
+
+
+
+class TestClass:
+    def __init__(self):
+        self.test = "test"
+        
+    def test_wrapper_in_class(self, data: List):
+        return perform_data_transformation(data)
+
+test = TestClass()
+test.test_wrapper_in_class(data)
+```
 
 </details>
 
