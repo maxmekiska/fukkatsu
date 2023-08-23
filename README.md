@@ -1,4 +1,4 @@
-# fukkatsu 復活 [![Downloads](https://pepy.tech/badge/fukkatsu)](https://pepy.tech/project/fukkatsu) [![PyPi](https://img.shields.io/pypi/v/fukkatsu.svg?color=blue)](https://pypi.org/project/fukkatsu/) [![GitHub license](https://img.shields.io/github/license/maxmekiska/fukkatsu?color=black)](https://github.com/maxmekiska/fukkatsu/blob/main/LICENSE) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/fukkatsu.svg)](https://pypi.python.org/project/fukkatsu/)
+# fukkatsu [![PyPi](https://img.shields.io/pypi/v/fukkatsu.svg?color=blue)](https://pypi.org/project/fukkatsu/) [![GitHub license](https://img.shields.io/github/license/maxmekiska/fukkatsu?color=black)](https://github.com/maxmekiska/fukkatsu/blob/main/LICENSE) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/fukkatsu.svg)](https://pypi.python.org/project/fukkatsu/)
 
 <br>
 
@@ -23,17 +23,58 @@ fukkatsu requires the environmental variable `OPENAI_API_KEY` to be set with you
 
 ## Description
 
-This is a proof of concept for a library that will leverage LLMs to dynamically fix and improve code during execution. Fukkatsu is the japanese word, `復活`, for "resurrection" or "revival". Metaphorically speaking, this library will attempt to fix your cars tire while you are driving it at 300 km/h. 
-
-Insane? Yes. Possible? Maybe. Fun? Definitely.
+This is a proof of concept for a library that will leverage LLMs to dynamically fix and improve code during execution. fukkatsu is the japanese word, `復活`, for "resurrection" or "revival". Metaphorically speaking, this library will attempt to fix your cars tire while you are driving it at 300 km/h. 
 
 
-Here is a representation of what I am trying to do: https://giphy.com/gifs/tire-kNRqJCLOe6ri8/fullscreen 
-
-
-This concept currently only applies to interpreted languages such as Python and not to compiled languages such as C++. The very nature of interpreted languages allows us to dynamically change the code during runtime.
+This concept currently only applies to interpreted languages such as python and not to compiled languages such as C++. The very nature of interpreted languages allows us to dynamically change the code during runtime.
 
 Furthermore, fukkatsu introduces a method to enhance ordinary functions with the power of LLMs. By decorating ordinary functions with natural language prompts, they can now dynamically adapt to unforeseen inputs.
+
+## Quick Start
+
+```bash
+pip install fukkatsu
+```
+
+```python
+import pandas as pd
+from datetime import datetime
+from typing import List
+
+from fukkatsu import resurrect
+
+@resurrect(
+    lives=3,
+    allow_installs = True,
+    additional_req = "Account for multiple date formats if necessary.",
+    active_twin = True,
+    primary_model_api = "openai",
+    secondary_model_api = "openai",
+    primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.01},
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.10}
+)
+def perform_data_transformation(data:List):
+    """takes in list of date strings and transforms them into datetime objects.
+    """
+    date_format = '%Y-%m-%d'
+    
+    for idx, date in enumerate(data):
+        data[idx] = datetime.strptime(date, date_format)
+        
+    return data
+
+if __name__ == "__main__":
+
+  data = [
+          "2023-07-07", "1 June 2020",
+          "2023.07.07", "2023-12-01",
+          "2020/01/01", "Nov 11 1994"
+          ]
+  
+  transformed_data = perform_data_transformation(data)
+  
+  transformed_data
+```
 
 ## MVP
 
