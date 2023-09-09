@@ -154,3 +154,15 @@ def rename_function(function_string: str, new_name: str) -> str:
     else:
         track.warning(f"Could not rename function {function_string}")
         return function_string
+
+
+def human_decision(prompt):
+    while True:
+        user_input = input(prompt).strip().lower()
+
+        if user_input == "y":
+            return True
+        elif user_input == "n":
+            return False
+        else:
+            track.error("Invalid input. Only 'y' for yes or 'n' for no vlaid.")

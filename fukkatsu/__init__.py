@@ -8,7 +8,7 @@ from fukkatsu.llm.openaigate import reset_openai_key, set_openai_key
 from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils import (check_and_install_libraries, extract_imports,
-                            extract_text_between_pipes,
+                            extract_text_between_pipes, human_decision,
                             insert_string_after_colon, remove_trace_lines,
                             remove_wrapper_name, rename_function,
                             return_input_arguments, return_source_code,
@@ -27,6 +27,7 @@ def resurrect(
     secondary_model_api: str = "openai",
     primary_config: dict = {},
     secondary_config: dict = {},
+    human_action: bool = False,
 ):
     def _resurrect(func):
         @functools.wraps(func)
@@ -124,8 +125,19 @@ def resurrect(
                         track.warning(
                             f"Reanimation successful, using:\n{suggested_code}\n"
                         )
-
-                        return output
+                        if human_action:
+                            track.warning("Requesting human review\n")
+                            decision = human_decision(
+                                f"The following is the result of the reanimation attempt:\n{output}\nProceed? [y/n]"
+                            )
+                            if decision == True:
+                                return output
+                            else:
+                                raise Exception(
+                                    f"Recommended animation rejected by human"
+                                )
+                        else:
+                            return output
 
                     except Exception as e:
                         track.exception(e)

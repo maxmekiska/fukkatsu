@@ -32,10 +32,6 @@ Furthermore, fukkatsu introduces a method to enhance ordinary functions with the
 
 ## Quick Start
 
-```bash
-pip install fukkatsu
-```
-
 ```python
 import pandas as pd
 from datetime import datetime

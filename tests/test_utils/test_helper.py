@@ -1,5 +1,5 @@
 import re
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -286,3 +286,22 @@ def test_check_and_install_libraries_no_error_from_syntax():
         check_and_install_libraries("from my_library import my_function")
 
     mock_install_libraries.assert_not_called()
+
+
+test_data = [
+    ("y", True),
+    ("n", False),
+    ("Y", True),
+    ("  y  ", True),
+]
+
+
+@pytest.mark.parametrize("user_input, expected_result", test_data)
+def test_check_human_decision_with_input_mock(user_input, expected_result):
+    responses = {"prompt": user_input}
+    fake_input = Mock(side_effect=lambda x: responses.get(x, ""))
+
+    with patch("builtins.input", fake_input):
+        output = human_decision("prompt")
+
+    assert output == expected_result
