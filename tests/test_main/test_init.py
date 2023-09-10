@@ -42,6 +42,7 @@ mock_values1 = [
     suggested_code,
 ]
 mock_values2 = [suggested_code_fail2, suggested_code_fail3, suggested_code]
+mock_values3 = suggested_code
 
 
 def mock_generator(mock_values):
@@ -121,7 +122,6 @@ def test_reanimate_failure():
 
 
 def test_reanimate_three_correction_success():
-    reset_memory()
 
     with patch(
         "fukkatsu.defibrillate",
@@ -202,3 +202,109 @@ def test_stalk_twin():
                 return x / y + z
 
             assert my_function(1, 0, 3) == 3
+
+
+def test_reanimate_human_input_accepted():
+
+    with patch(
+        "fukkatsu.defibrillate",
+        side_effect=mock_values3,
+    ):
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = True
+
+            @resurrect(lives=1, human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
+
+
+def test_reanimate_human_input_rejected():
+
+    with patch(
+        "fukkatsu.defibrillate",
+        side_effect=mock_values3,
+    ):
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = False
+
+            @resurrect(lives=1, human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            with pytest.raises(Exception) as e:
+                my_function(1, 0, 3)
+
+            expected_error_msg = "|__|__|______ my_function flatlined"
+            assert str(e.value) == expected_error_msg
+
+
+def test_mutate_human_accepted():
+
+    with patch("fukkatsu.enhance") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = True
+
+            @mutate(request="Test Request", human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
+
+
+def test_mutate_human_rejection():
+
+    with patch("fukkatsu.enhance") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = False
+
+            @mutate(request="Test Request", human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            with pytest.raises(Exception) as e:
+                my_function(1, 0, 3)
+
+            expected_error_msg = "Human rejected mutation. Terminating\n"
+            assert str(e.value) == expected_error_msg
+
+
+def test_stalk_human_accepted():
+
+    with patch("fukkatsu.stalker") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = True
+
+            @stalk(likelihood=1.0, active_twin=False, human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            assert my_function(1, 0, 3) == 3
+
+
+def test_stalk_human_rejection():
+
+    with patch("fukkatsu.stalker") as mock_enhance:
+        mock_enhance.return_value = suggested_code
+
+        with patch("fukkatsu.human_decision") as mock_decision:
+            mock_decision.return_value = False
+
+            @stalk(likelihood=1.0, active_twin=False, human_action=True)
+            def my_function(x, y, z):
+                return x / y + z
+
+            with pytest.raises(Exception) as e:
+                my_function(1, 0, 3)
+
+            expected_error_msg = "Human rejected suggestion. Terminating\n"
+            assert str(e.value) == expected_error_msg

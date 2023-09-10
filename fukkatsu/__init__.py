@@ -1,4 +1,4 @@
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 
 import copy
 import functools
@@ -7,12 +7,12 @@ import traceback
 from fukkatsu.llm.openaigate import reset_openai_key, set_openai_key
 from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.observer.tracker import track
-from fukkatsu.utils import (check_and_install_libraries, extract_imports,
-                            extract_text_between_pipes, human_decision,
-                            insert_string_after_colon, remove_trace_lines,
-                            remove_wrapper_name, rename_function,
-                            return_input_arguments, return_source_code,
-                            sampler)
+from fukkatsu.utils.helper import (check_and_install_libraries,
+                                   extract_imports, extract_text_between_pipes,
+                                   human_decision, insert_string_after_colon,
+                                   remove_trace_lines, remove_wrapper_name,
+                                   rename_function, return_input_arguments,
+                                   return_source_code, sampler)
 from fukkatsu.utils.synthesize import defibrillate, enhance, stalker, twin
 
 set_openai_key()
@@ -28,6 +28,7 @@ def resurrect(
     primary_config: dict = {},
     secondary_config: dict = {},
     human_action: bool = False,
+    active_memory: bool = True,
 ):
     def _resurrect(func):
         @functools.wraps(func)
@@ -52,7 +53,7 @@ def resurrect(
                 track.warning(f"Input arguments: {input_args}\n")
                 track.warning(f"\nSource Code: \n {source}\n")
 
-                if trace in SHORT_TERM_MEMORY.keys():
+                if trace in SHORT_TERM_MEMORY.keys() and active_memory == True:
                     track.warning("Correction already in-memory\n")
                     suggested_code = SHORT_TERM_MEMORY[trace]
                     track.warning(
@@ -133,9 +134,10 @@ def resurrect(
                             if decision == True:
                                 return output
                             else:
-                                raise Exception(
-                                    f"Recommended animation rejected by human"
+                                track.warning(
+                                    "Human rejected correction. Terminating\n"
                                 )
+                                break
                         else:
                             return output
 
@@ -149,7 +151,7 @@ def resurrect(
                         trace = remove_trace_lines(trace)
                         track.warning("Reanimation failed, requesting new correction\n")
 
-                        if trace in SHORT_TERM_MEMORY.keys():
+                        if trace in SHORT_TERM_MEMORY.keys() and active_memory == True:
                             track.warning("Correction already in-memory\n")
                             suggested_code = SHORT_TERM_MEMORY[trace]
                             track.warning(
@@ -220,6 +222,7 @@ def mutate(
     secondary_model_api: str = "openai",
     primary_config: dict = {},
     secondary_config: dict = {},
+    human_action: bool = False,
 ):
     def _mutate(func):
         @functools.wraps(func)
@@ -278,6 +281,17 @@ def mutate(
 
             output = new_function(*args, **kwargs)
 
+            if human_action:
+                track.warning("Requesting human review\n")
+                decision = human_decision(
+                    f"The following is the result of the mutation attempt:\n{output}\nProceed? [y/n]"
+                )
+                if decision == True:
+                    track.warning(f"Human accepted mutation\n")
+                    return output
+                else:
+                    raise Exception(f"Human rejected mutation. Terminating\n")
+
             track.warning(f"Mutation successful, using {suggested_code}\n")
 
             return output
@@ -296,6 +310,7 @@ def stalk(
     secondary_model_api: str = "openai",
     primary_config: dict = {},
     secondary_config: dict = {},
+    human_action: bool = False,
 ):
     def _stalk(func):
         @functools.wraps(func)
@@ -359,6 +374,17 @@ def stalk(
             locals()[func.__name__] = new_function
 
             output = new_function(*args, **kwargs)
+
+            if human_action:
+                track.warning("Requesting human review\n")
+                decision = human_decision(
+                    f"The following is the result of the correction attempt:\n{output}\nProceed? [y/n]"
+                )
+                if decision == True:
+                    track.warning(f"Human accepted suggestion\n")
+                    return output
+                else:
+                    raise Exception(f"Human rejected suggestion. Terminating\n")
 
             track.warning(f"Review successful, using {suggested_code}\n")
 

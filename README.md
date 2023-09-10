@@ -470,6 +470,19 @@ test.test_wrapper_in_class(data)
 
 
 
+## fukkatsu 0.0.11 - `The Humans are back`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+Feature to get human-in-the-loop functionality. Coming soon.
+<br>
+- resurrect
+
+</details>
+
+
 ## Samples - `Synthetic` Code in Action
 
 <details>
