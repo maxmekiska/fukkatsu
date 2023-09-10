@@ -34,6 +34,11 @@ suggested_code_fail3 = """
     return x / y + y|||
 """
 
+suggested_code_dummy = """
+|||def my_function(x, y, z):
+    print("success")|||
+"""
+
 mock_values0 = [suggested_code_fail0, suggested_code_fail1, suggested_code]
 mock_values1 = [
     suggested_code_fail0,
@@ -68,7 +73,7 @@ def test_reanimate_one_correction_success():
     with patch("fukkatsu.defibrillate") as mock_defibrillate:
         mock_defibrillate.return_value = suggested_code
 
-        @resurrect(lives=2)
+        @resurrect(lives=1)
         def my_function(x, y, z):
             return x / y + z
 
@@ -308,3 +313,52 @@ def test_stalk_human_rejection():
 
             expected_error_msg = "Human rejected suggestion. Terminating\n"
             assert str(e.value) == expected_error_msg
+
+
+def test_reanimation_memory_off_human_yes():
+
+    with patch("fukkatsu.defibrillate") as mock_defibrillate, patch(
+        "fukkatsu.human_decision"
+    ) as mock_human_input:
+        mock_defibrillate.return_value = suggested_code
+        mock_human_input.return_value = True
+
+        @resurrect(lives=1, active_memory=False, human_action=True)
+        def my_function(x, y, z):
+            return x / y + z
+
+        assert my_function(1, 0, 3) == 3
+
+
+def test_reanimation_memory_on_human_yes():
+
+    with patch("fukkatsu.defibrillate") as mock_defibrillate, patch(
+        "fukkatsu.human_decision"
+    ) as mock_human_input:
+        mock_defibrillate.return_value = suggested_code
+        mock_human_input.return_value = True
+
+        @resurrect(lives=1, active_memory=True, human_action=True)
+        def my_function(x, y, z):
+            return x / y + z
+
+        assert my_function(1, 0, 3) == 3
+
+
+def test_reanimation_memory_off_human_no():
+
+    with patch("fukkatsu.defibrillate") as mock_defibrillate, patch(
+        "fukkatsu.human_decision"
+    ) as mock_human_input:
+        mock_defibrillate.return_value = suggested_code
+        mock_human_input.return_value = False
+
+        @resurrect(lives=1, active_memory=False, human_action=True)
+        def my_function(x, y, z):
+            return x / y + z
+
+        with pytest.raises(Exception) as e:
+            my_function(1, 0, 3)
+
+        expected_error_msg = "|__|__|______ my_function flatlined"
+        assert str(e.value) == expected_error_msg
