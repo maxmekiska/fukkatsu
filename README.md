@@ -476,7 +476,65 @@ test.test_wrapper_in_class(data)
   <summary>Expand</summary>
   <br>
 
-Feature to get human-in-the-loop functionality. Coming soon.
+Work in progress. Not released yet.
+
+Feature to get human-in-the-loop functionality. Once a successful correction was determind, the user will be asked to confirm the correction suggestion via a simple "y" or "n" command line input.
+
+
+### `resurrect`
+```python
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+    human_action: bool = False,
+    active_memory: bool = True,    
+):
+  ...
+```
+
+### `mutate`
+```python
+def mutate(
+    request: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+    human_action: bool = False,
+):
+  ...
+```
+
+### `stalk`
+```python
+def stalk(
+    likelihood: float = 1.0,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = False,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "openai",
+    primary_config: dict = {},
+    secondary_config: dict = {},
+    human_action: bool = False,
+):
+  ...
+```
+
+
+
+## Appendix
+
+Added active_memory parameter to control the activation of the short term memory. Setting the `active_memory` parameter to `False` will prevent the `resurrect` decorator from remembering past solutions.
+
 <br>
 - resurrect
 
