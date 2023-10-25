@@ -31,35 +31,35 @@ CONTEXT_STALKER = (
 
 # Tokens: 105
 OUTPUT_CONSTRAINTS = (
-    "Your response needs to strictly follow the following requierements:\n"
-    "1. Respond with exactly one code box.\n"
-    "2. Provide only the code of the corrected function.\n"
-    "3. Do not provide examples or comments.\n"
-    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified.\n"
-    "5. When providing the corrected function, make sure to implement all additional logic explained in the faulty functions docstring.\n"
+    "Your response needs to strictly follow the following requierements: "
+    "1. Respond with exactly one code box. "
+    "2. Provide only the code of the corrected function. "
+    "3. Do not provide examples or comments. "
+    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified. "
+    "5. When providing the corrected function, make sure to implement all additional logic explained in the faulty functions docstring. "
 )
 
 # Tokens: 123
 OUTPUT_CONSTRAINTS_MUTATE = (
-    "Your response needs to strictly follow the following requierements:\n"
-    "1. Respond with exactly one code box.\n"
-    "2. Provide only the code of the changed function.\n"
-    "3. Do not provide examples or comments.\n"
-    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified.\n"
-    "5. Make sure to write a docstring for the function that explains the original and additional functionality.\n"
+    "Your response needs to strictly follow the following requierements: "
+    "1. Respond with exactly one code box. "
+    "2. Provide only the code of the changed function. "
+    "3. Do not provide examples or comments. "
+    "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified. "
+    "5. Make sure to write a docstring for the function that explains the original and additional functionality. "
 )
 
 # Tokens: 127
 OUTPUT_CONSTRAINTS_TWIN = (
-    "Your response needs to strictly follow the following requierements:\n"
-    "1. Respond with exactly one code box.\n"
-    "2. Provide only the code of the changed function or the exact same function if you deem no changes necessary.\n"
-    "3. Do not change the original name of the function. Use the exact same name as the original function.\n"
-    "4. Do not provide examples or comments.\n"
-    "5. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified.\n"
-    "6. Make sure to write a docstring for the function that explains the original and additional functionality.\n"
-    "7. If the function contains the space and time complexity in the docstring, make sure to include it in your new docstring as well.\n"
-    "8. Make sure to include all import statement necessary for the function to work.\n"
+    "Your response needs to strictly follow the following requierements: "
+    "1. Respond with exactly one code box. "
+    "2. Provide only the code of the changed function or the exact same function if you deem no changes necessary. "
+    "3. Do not change the original name of the function. Use the exact same name as the original function. "
+    "4. Do not provide examples or comments. "
+    "5. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified. "
+    "6. Make sure to write a docstring for the function that explains the original and additional functionality. "
+    "7. If the function contains the space and time complexity in the docstring, make sure to include it in your new docstring as well. "
+    "8. Make sure to include all import statement necessary for the function to work. "
 )
 # Tokens: 12
-ADDITIONAL = """Incorporate the following additional request in your answer:\n"""
+ADDITIONAL = """Incorporate the following additional request in your answer: """

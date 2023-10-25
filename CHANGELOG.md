@@ -64,5 +64,5 @@
 
 ### 0.0.11
 
-- human_action argument added for human in the loop feature
-- experimental feature to turn off short term memory within resurrect decorator
+- `human_action` argument added for human in the loop feature
+- experimental feature to turn off short term memory within resurrect decorator via `active_memory`
