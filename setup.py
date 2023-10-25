@@ -9,7 +9,7 @@ setup(
     author="Maximilian Mekiska",
     author_email="maxmekiska@gmail.com",
     url="https://github.com/maxmekiska/fukkatsu",
-    description="A python library for runtime LLM supported code corrections.",
+    description="Dynamic Software Improvement and Mutation using LLMs for Stochastic Synthetic Code Injections.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="fukkatsu",
