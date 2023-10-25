@@ -14,19 +14,20 @@ fukkatsu will utilize the `gpt-3.5-turbo` model in all simulations. For each sim
 After conducting all simulations, we will apply a `chi-square test`. This test will help determine whether there is a statistically significant difference in the fukkatsu's performance across the error types. If the test results indicate a significant association, it suggests that the effectiveness of fukkatsu varies depending on the error type.
 
 
-You can see each simulation recored in the different jupyter notebooks contained within the `research` directory.
+You can see each simulation recored in the different jupyter notebooks contained within the linked gists.
 
 
 ## Results
 
 ### Simulation Summary
 
+
 | **Error Type** | **Error Name** | **Success** | **Failure** |    **Date**    |   **Version**  | **Commit ID** | **p-value** | **alpha** |**Rejected H<sub>0</sub>** |
 |------------|------------|---------|---------|------------|------------|-----------|---------|--------|-------|
-|UnicodeDecodeError |  [Parser Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuParserError.ipynb) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
-| TypeError |   [Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuTypeError.ipynb)  |   38     |   12    | 19/06/23 |   0.0.7     |2903c2a|   0.00015293200080179759 | 0.05 |  Yes  | 
-| ValueError |   [Parse Date Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuValueError.ipynb)  |   50     |   0    | 30/06/23 |   0.0.9     |6fe478c|  8.881784197001252e-16  | 0.05 |  Yes  | 
-| TypeError |   [API Type Error](https://github.com/maxmekiska/fukkatsu/blob/main/research/simulationNotebooks/fukkatsuApiTypeError.ipynb)  |   50     |   0    | 01/07/23 |   0.0.9     |0369c34|  8.881784197001252e-16  | 0.05 |  Yes  | 
+|UnicodeDecodeError |  [Parser Error](https://gist.github.com/maxmekiska/e901777c42c37da00be8bdd8ac826937) |   45    |   5     | 19/06/23 |   0.0.7  | 9d3ec24   | 2.104926011270436e-09 |0.05| Yes    |        
+| TypeError |   [Type Error](https://gist.github.com/maxmekiska/e07d89672101a738ace34894374367d3)  |   38     |   12    | 19/06/23 |   0.0.7     |2903c2a|   0.00015293200080179759 | 0.05 |  Yes  | 
+| ValueError |   [Parse Date Error](https://gist.github.com/maxmekiska/5d74deb3b00ce27879c581baac2a045e)  |   50     |   0    | 30/06/23 |   0.0.9     |6fe478c|  8.881784197001252e-16  | 0.05 |  Yes  | 
+| TypeError |   [API Type Error](https://gist.github.com/maxmekiska/e88bdbe15f111069b885db05484b71bb)  |   50     |   0    | 01/07/23 |   0.0.9     |0369c34|  8.881784197001252e-16  | 0.05 |  Yes  | 
 
 ### H<sub>0</sub> Rejection Plots
 

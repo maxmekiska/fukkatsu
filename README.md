@@ -9,9 +9,6 @@
 
 <br>
 
-<p align="center">
-  <img src="assets/fukkatsu.png" alt="fukkatsu Logo" height="300">
-</p>
 
 ```
 pip install fukkatsu
@@ -408,8 +405,6 @@ test.test_wrapper_in_class(data)
 <details>
   <summary>Expand</summary>
   <br>
-
-Work in progress. Not released yet.
 
 Feature to get human-in-the-loop functionality. Once a successful correction was determind, the user will be asked to confirm the correction suggestion via a simple "y" or "n" command line input.
 
