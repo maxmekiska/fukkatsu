@@ -66,3 +66,7 @@
 
 - `human_action` argument added for human in the loop feature
 - experimental feature to turn off short term memory within resurrect decorator via `active_memory`
+
+### 0.0.12
+
+- added support for Google's `gemini-pro` LLM

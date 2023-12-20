@@ -37,6 +37,7 @@ OUTPUT_CONSTRAINTS = (
     "3. Do not provide examples or comments. "
     "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified. "
     "5. When providing the corrected function, make sure to implement all additional logic explained in the faulty functions docstring. "
+    "6. Make sure to include all import statement necessary for the function to work. "
 )
 
 # Tokens: 123
@@ -47,6 +48,7 @@ OUTPUT_CONSTRAINTS_MUTATE = (
     "3. Do not provide examples or comments. "
     "4. Ensure that you return the requested Python code by placing ||| at the beginning of the code, and ||| at the end of the code. These separators should be used exactly as specified. "
     "5. Make sure to write a docstring for the function that explains the original and additional functionality. "
+    "6. Make sure to include all import statement necessary for the function to work. "
 )
 
 # Tokens: 127

@@ -1,3 +1,7 @@
+from typing import Union
+
+from fukkatsu.llm.googlegate import (GoogleGenerateContentConfig,
+                                     request_google_model)
 from fukkatsu.llm.openaigate import (OpenaiChatCompletionConfig,
                                      request_openai_model)
 from fukkatsu.observer.tracker import track
@@ -7,7 +11,7 @@ from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    OUTPUT_CONSTRAINTS_MUTATE,
                                    OUTPUT_CONSTRAINTS_TWIN)
 
-MODEL_API = {"openai": request_openai_model}
+MODEL_API = {"openai": request_openai_model, "google": request_google_model}
 
 
 def defibrillate(
@@ -16,7 +20,7 @@ def defibrillate(
     faulty_function: str,
     error_trace: str,
     additional_req: str = "",
-    config: OpenaiChatCompletionConfig = None,
+    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (
@@ -41,7 +45,7 @@ def enhance(
     inputs: str,
     target_function: str,
     request: str = "",
-    config: OpenaiChatCompletionConfig = None,
+    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_MUTATE}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -59,7 +63,7 @@ def twin(
     model_api: str,
     inputs: str,
     target_function: str,
-    config: OpenaiChatCompletionConfig = None,
+    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_TWIN}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -77,7 +81,7 @@ def stalker(
     inputs: str,
     function: str,
     additional_req: str = "",
-    config: OpenaiChatCompletionConfig = None,
+    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (

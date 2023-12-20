@@ -465,6 +465,274 @@ Added `active_memory` parameter to control the activation of the short term memo
 
 </details>
 
+## fukkatsu 0.0.12 - `Making new Friends`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+Work in progress
+
+This release will support Google's `gemini-pro` LLM. Each decorator will now support the google generative-ai SDK.
+
+The following shows an example configuration that leverages OpenAI and Google LLM's:
+
+### `resurrect`
+```python
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = True,
+    primary_model_api: str = "openai",
+    secondary_model_api: str = "google",
+    primary_config = {"model": "gemini-pro", "temperature": 0.1},
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1}, 
+    human_action: bool = True,
+    active_memory: bool = True,    
+):
+  ...
+```
+
+### Example ressurection configuration
+```python
+import fukkatsu
+print(fukkatsu.__version__)
+
+
+from fukkatsu import resurrect
+
+import pandas as pd
+from datetime import datetime
+
+
+@resurrect(
+    lives=3,
+    allow_installs = True,
+    additional_req = "Account for multiple dateformats if necessary.",
+    active_twin = True,
+    primary_model_api = "google",
+    secondary_model_api = "openai",
+    primary_config = {"model": "gemini-pro", "temperature": 0.1},
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1}, 
+    human_action = True,
+    active_memory = True
+)
+def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_format = '%Y-%m-%d'
+    
+    for idx, date in enumerate(data):
+        data[idx] = datetime.strptime(date, date_format)
+        
+    return data
+
+
+data = [
+        "2023-07-07", "1 June 2020",
+        "2023.07.07", "2023-12-01",
+        "2020/01/01", "Nov 11 1994"
+        ]
+
+transformed_data = perform_data_transformation(data)
+
+print(transformed_data)
+```
+
+
+### Example logs of a live resurrection - Twin mode OpenAI + Google
+```
+(env) PS C:\Users\Max\Documents\Misc\fukkatsu-integration-tests> python .\test-dates-twin.py
+
+
+2023-12-20 01:42:13,337 - Setting OPENAI_API_KEY
+2023-12-20 01:42:13,337 - OPENAI_API_KEY found in environment variables.
+2023-12-20 01:42:13,337 - Setting GOOGLE_API_KEY
+2023-12-20 01:42:13,337 - GOOGLE_API_KEY found in environment variables.
+
+
+2023-12-20 01:42:13,866 - time data '1 June 2020' does not match format '%Y-%m-%d'
+Traceback (most recent call last):
+  File "c:\users\max\documents\research\fukkatsu\fukkatsu\fukkatsu\__init__.py", line 43, in wrapper
+    result = func(*args_copy, **kwargs_copy)
+  File "C:\Users\Max\Documents\Misc\fukkatsu-integration-tests\test-dates-twin.py", line 29, in perform_data_transformation
+    data[idx] = datetime.strptime(date, date_format)
+  File "C:\Users\Max\AppData\Local\Programs\Python\Python39\lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "C:\Users\Max\AppData\Local\Programs\Python\Python39\lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data '1 June 2020' does not match format '%Y-%m-%d'
+
+
+2023-12-20 01:42:13,874 - Input arguments: {'data': ['2023-07-07', '1 June 2020', '2023.07.07', '2023-12-01', '2020/01/01', 'Nov 11 1994']}
+
+
+2023-12-20 01:42:13,874 -
+Source Code:
+ def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_format = '%Y-%m-%d'
+
+    for idx, date in enumerate(data):
+        data[idx] = datetime.strptime(date, date_format)
+
+    return data
+
+
+2023-12-20 01:42:13,874 - Requesting INITIAL correction - Attempt 1
+
+
+
+2023-12-20 01:42:13,874 - API REQUEST to google
+2023-12-20 01:42:13,874 - API REQUEST to gemini-pro - Temperature: 0.1 - Max Tokens: 1024 - candidate_count: 1 - Stop: None
+2023-12-20 01:42:17,296 - Received INITIAL RAW suggestion:
+|||
+import datetime
+
+def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+
+|||
+
+
+
+2023-12-20 01:42:17,304 - Requesting TWIN review
+
+
+
+2023-12-20 01:42:17,304 - API REQUEST to openai
+2023-12-20 01:42:17,304 - API REQUEST to gpt-3.5-turbo - Temperature: 0.1 - Max Tokens: 1024 - N: 1 - Stop: None
+2023-12-20 01:42:20,694 - TWIN review complete:
+|||
+import datetime
+
+def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+|||
+2023-12-20 01:42:20,694 - Twin Safeguard: Function name changed to |||
+import datetime
+
+def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+|||
+
+
+2023-12-20 01:42:20,694 - Received INITIAL CLEANED suggestion:
+import datetime
+
+def perform_data_transformation(data):
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+
+
+2023-12-20 01:42:20,694 - Import block added to suggested code:
+ import datetime
+
+def perform_data_transformation(data):
+    import datetime
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+
+
+2023-12-20 01:42:20,698 - Attempt 1 to reanimate
+
+
+
+2023-12-20 01:42:20,698 - Reanimation successful, using:
+import datetime
+
+def perform_data_transformation(data):
+    import datetime
+    """takes in list of datestrings, transforms into datetime objects.
+    """
+    date_formats = ['%Y-%m-%d', '%d %B %Y', '%Y.%m.%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%b %d %Y']
+
+    for idx, date in enumerate(data):
+        for date_format in date_formats:
+            try:
+                data[idx] = datetime.datetime.strptime(date, date_format)
+                break
+            except ValueError:
+                continue
+
+    return data
+
+
+2023-12-20 01:42:20,698 - Requesting human review
+The following is the result of the reanimation attempt:
+
+[datetime.datetime(2023, 7, 7, 0, 0), datetime.datetime(2020, 6, 1, 0, 0), datetime.datetime(2023, 7, 7, 0, 0), datetime.datetime(2023, 12, 1, 0, 0), datetime.datetime(2020, 1, 1, 0, 0), datetime.datetime(1994, 11, 11, 0, 0)]
+
+
+Proceed? [y/n]y
+
+
+[datetime.datetime(2023, 7, 7, 0, 0), datetime.datetime(2020, 6, 1, 0, 0), datetime.datetime(2023, 7, 7, 0, 0), datetime.datetime(2023, 12, 1, 0, 0), datetime.datetime(2020, 1, 1, 0, 0), datetime.datetime(1994, 11, 11, 0, 0)]
+```
+
+
+</details>
+
 
 ## Samples - `Synthetic` Code in Action
 
