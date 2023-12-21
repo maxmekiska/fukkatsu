@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from typing import Optional
 
@@ -14,24 +13,6 @@ class OpenaiChatCompletionConfig:
     max_tokens: int
     n: int
     stop: Optional[str]
-
-
-def set_openai_key():
-    track.warning("Setting OPENAI_API_KEY")
-    try:
-        openai.api_key = os.environ.get("OPENAI_API_KEY")
-        track.warning("OPENAI_API_KEY found in environment variables.")
-    except:
-        track.error("OPENAI_API_KEY not found in environment variables.")
-
-
-def reset_openai_key(key: str):
-    if type(key) != str:
-        track.error("Invalid Key format. OPENAI_API_KEY not overwritten.")
-        raise Exception("Invalid Key format. OPENAI_API_KEY not overwritten.")
-    else:
-        openai.api_key = key
-        track.warning("OPENAI_API_KEY overwritten.")
 
 
 def request_openai_model(

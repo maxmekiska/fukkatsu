@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from typing import Optional
 
@@ -16,24 +15,6 @@ class GoogleGenerateContentConfig:
     temperature: float
     top_p: Optional[float]
     top_k: Optional[int]
-
-
-def set_google_key():
-    track.warning("Setting GOOGLE_API_KEY")
-    try:
-        genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-        track.warning("GOOGLE_API_KEY found in environment variables.")
-    except:
-        track.error("GOOGLE_API_KEY not found in environment variables.")
-
-
-def reset_google_key(key: str):
-    if type(key) != str:
-        track.error("Invalid Key format. GOOGLE_API_KEY not overwritten.")
-        raise Exception("Invalid Key format. GOOGLE_API_KEY not overwritten.")
-    else:
-        genai.configure(api_key=key)
-        track.warning("GOOGLE_API_KEY overwritten.")
 
 
 def request_google_model(

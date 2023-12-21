@@ -4,8 +4,6 @@ import copy
 import functools
 import traceback
 
-from fukkatsu.llm.googlegate import reset_google_key, set_google_key
-from fukkatsu.llm.openaigate import reset_openai_key, set_openai_key
 from fukkatsu.memory import SHORT_TERM_MEMORY
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.helper import (check_and_install_libraries,
@@ -15,9 +13,6 @@ from fukkatsu.utils.helper import (check_and_install_libraries,
                                    rename_function, return_input_arguments,
                                    return_source_code, sampler)
 from fukkatsu.utils.synthesize import defibrillate, enhance, stalker, twin
-
-set_openai_key()
-set_google_key()
 
 
 def resurrect(

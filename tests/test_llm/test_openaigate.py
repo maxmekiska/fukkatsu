@@ -1,49 +1,57 @@
-import io
-import logging
-import os
-import sys
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
-import openai
 import pytest
 
-from fukkatsu.llm.openaigate import reset_openai_key, set_openai_key
-from fukkatsu.observer.tracker import track
+from fukkatsu.llm.openaigate import request_openai_model
 
 
 @pytest.fixture
-def captured_output():
-    captured_output = io.StringIO()
-    sys.stdout = captured_output
-    yield captured_output
-    sys.stdout = sys.__stdout__
+def mock_openai_create():
+
+    with patch("fukkatsu.llm.openaigate.openai.ChatCompletion.create") as mock_create:
+        yield mock_create
 
 
-def test_set_openai_key_with_api_key():
-    with patch.dict(os.environ, {"OPENAI_API_KEY": "test_key"}):
-        set_openai_key()
-        assert openai.api_key == "test_key"
-        assert "OPENAI_API_KEY" in os.environ
+@pytest.fixture
+def mock_track_warning():
+    with patch("fukkatsu.observer.tracker.track.warning") as mock_warning:
+        yield mock_warning
 
 
-def test_set_openai_key_without_api_key(captured_output):
-    handler = logging.StreamHandler(captured_output)
-    track.addHandler(handler)
-    with patch("os.environ.get") as import_module_mock:
-        import_module_mock.side_effect = Exception
-        set_openai_key()
-        output = captured_output.getvalue().strip()
-        assert "OPENAI_API_KEY not found" in output
+def test_request_openai_model(mock_openai_create, mock_track_warning):
+    set_prompt = "Test prompt"
+    model = "gpt-3.5-turbo"
+    temperature = 0.1
+    max_tokens = 1024
+    n = 1
+    stop = None
 
+    mock_openai_response = {"choices": [{"message": {"content": "Test response"}}]}
 
-def test_overwrite_openai_key():
-    with patch.dict(os.environ, {"OPENAI_API_KEY": "test_key"}):
-        reset_openai_key("new_key")
-        assert openai.api_key == "new_key"
+    mock_openai_create.return_value = mock_openai_response
 
+    result = request_openai_model(
+        set_prompt=set_prompt,
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        n=n,
+        stop=stop,
+    )
 
-def test_overwrite_openai_key_error():
-    with pytest.raises(
-        Exception, match="Invalid Key format. OPENAI_API_KEY not overwritten."
-    ):
-        reset_openai_key(23)
+    mock_track_warning.assert_called_once_with(
+        f"API REQUEST to {model} - Temperature: {temperature} - Max Tokens: {max_tokens} - N: {n} - Stop: {stop}"
+    )
+
+    mock_openai_create.assert_called_once_with(
+        model=model,
+        messages=[
+            {"role": "system", "content": set_prompt},
+        ],
+        max_tokens=max_tokens,
+        n=n,
+        stop=stop,
+        temperature=temperature,
+    )
+
+    assert result == "Test response"
