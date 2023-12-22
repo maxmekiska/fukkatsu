@@ -16,7 +16,6 @@ setup(
     version="0.0.12",
     packages=find_packages(include=["fukkatsu", "fukkatsu.*"]),
     install_requires=[
-        "setuptools >= 41.0.0",
         "openai >= 0.27.5, <= 0.28",
         "google-generativeai >= 0.3.1, <= 0.4.0"
     ],

@@ -1,9 +1,7 @@
-from typing import Union
+from typing import Any, Callable, Dict, Optional
 
-from fukkatsu.llm.googlegate import (GoogleGenerateContentConfig,
-                                     request_google_model)
-from fukkatsu.llm.openaigate import (OpenaiChatCompletionConfig,
-                                     request_openai_model)
+from fukkatsu.llm.googlegate import request_google_model
+from fukkatsu.llm.openaigate import request_openai_model
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    CONTEXT_STALKER, CONTEXT_TWIN,
@@ -11,7 +9,10 @@ from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    OUTPUT_CONSTRAINTS_MUTATE,
                                    OUTPUT_CONSTRAINTS_TWIN)
 
-MODEL_API = {"openai": request_openai_model, "google": request_google_model}
+MODEL_API: Dict[str, Callable] = {
+    "openai": request_openai_model,
+    "google": request_google_model,
+}
 
 
 def defibrillate(
@@ -20,7 +21,7 @@ def defibrillate(
     faulty_function: str,
     error_trace: str,
     additional_req: str = "",
-    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (
@@ -35,7 +36,7 @@ def defibrillate(
         )
     track.warning(f"API REQUEST to {model_api}")
 
-    corrected_function = MODEL_API[model_api](set_prompt, **config)
+    corrected_function = MODEL_API[model_api](set_prompt, **(config or {}))
 
     return corrected_function
 
@@ -45,7 +46,7 @@ def enhance(
     inputs: str,
     target_function: str,
     request: str = "",
-    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_MUTATE}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -54,7 +55,7 @@ def enhance(
 
     track.warning(f"API REQUEST to {model_api}")
 
-    mutated_function = MODEL_API[model_api](set_prompt, **config)
+    mutated_function = MODEL_API[model_api](set_prompt, **(config or {}))
 
     return mutated_function
 
@@ -63,7 +64,7 @@ def twin(
     model_api: str,
     inputs: str,
     target_function: str,
-    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> str:
     set_prompt = (
         f"{CONTEXT_TWIN}\n\n{target_function}\n\nThe function received the following inputs:\n\n"
@@ -71,7 +72,7 @@ def twin(
     )
 
     track.warning(f"API REQUEST to {model_api}")
-    mutated_function = MODEL_API[model_api](set_prompt, **config)
+    mutated_function = MODEL_API[model_api](set_prompt, **(config or {}))
 
     return mutated_function
 
@@ -81,7 +82,7 @@ def stalker(
     inputs: str,
     function: str,
     additional_req: str = "",
-    config: Union[OpenaiChatCompletionConfig, GoogleGenerateContentConfig] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> str:
     if additional_req == "":
         set_prompt = (
@@ -95,6 +96,6 @@ def stalker(
             f"{ADDITIONAL}{additional_req}"
         )
     track.warning(f"API REQUEST to {model_api}")
-    corrected_function = MODEL_API[model_api](set_prompt, **config)
+    corrected_function = MODEL_API[model_api](set_prompt, **(config or {}))
 
     return corrected_function

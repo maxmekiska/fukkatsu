@@ -14,9 +14,9 @@
 pip install fukkatsu
 ```
 
-## OpenAI API
+## API Keys
 
-fukkatsu requires the environmental variable `OPENAI_API_KEY` to be set with your OpenAI API key.
+fukkatsu requires the environmental variable `OPENAI_API_KEY` and/or `GOOGLE_API_KEY` set.
 
 ## Description
 
@@ -32,7 +32,6 @@ Furthermore, fukkatsu introduces a method to enhance ordinary functions with the
 ```python
 import pandas as pd
 from datetime import datetime
-from typing import List
 
 from fukkatsu import resurrect
 
@@ -41,12 +40,12 @@ from fukkatsu import resurrect
     allow_installs = True,
     additional_req = "Account for multiple date formats if necessary.",
     active_twin = True,
-    primary_model_api = "openai",
+    primary_model_api = "google",
     secondary_model_api = "openai",
-    primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.01},
+    primary_config = {"model": "gemini-pro", "temperature": 0.01},
     secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.10}
 )
-def perform_data_transformation(data:List):
+def perform_data_transformation(data):
     """takes in list of date strings and transforms them into datetime objects.
     """
     date_format = '%Y-%m-%d'

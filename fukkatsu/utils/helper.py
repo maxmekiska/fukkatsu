@@ -1,11 +1,11 @@
 import ast
 import importlib
 import inspect
-import logging
 import random
 import re
 import subprocess
 import sys
+from typing import Callable
 
 from fukkatsu.observer.tracker import track
 
@@ -47,12 +47,12 @@ def extract_text_between_pipes(message: str) -> str:
     return message[start_idx:end_idx].strip()
 
 
-def return_source_code(func: callable) -> str:
+def return_source_code(func: Callable) -> str:
     source = inspect.getsource(func)
     return source
 
 
-def return_input_arguments(func: callable, *args, **kwargs) -> dict:
+def return_input_arguments(func: Callable, *args, **kwargs) -> dict:
     signature = inspect.signature(func)
     bound_args = signature.bind(*args, **kwargs)
     input_args = {k: bound_args.arguments[k] for k in signature.parameters.keys()}
@@ -74,7 +74,9 @@ def extract_imports(code_block: str) -> str:
             import_statements.extend(import_names)
         elif isinstance(node, ast.ImportFrom):
             module_name = (
-                node.module if node.level == 0 else "." * node.level + node.module
+                node.module
+                if (node.module is not None and node.level == 0)
+                else "." * node.level + (node.module or "")
             )
             import_names = [
                 f"from {module_name} import {name.name}"
@@ -85,6 +87,7 @@ def extract_imports(code_block: str) -> str:
             import_statements.extend(import_names)
 
     import_block = "\n".join(["    " + statement for statement in import_statements])
+
     return import_block
 
 

@@ -1,1 +1,3 @@
-SHORT_TERM_MEMORY = {}
+from typing import Dict
+
+SHORT_TERM_MEMORY: Dict[str, str] = {}

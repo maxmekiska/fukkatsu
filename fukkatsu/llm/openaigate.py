@@ -1,18 +1,8 @@
-from dataclasses import dataclass
 from typing import Optional
 
 import openai
 
 from fukkatsu.observer.tracker import track
-
-
-@dataclass
-class OpenaiChatCompletionConfig:
-    model: str
-    temperature: float
-    max_tokens: int
-    n: int
-    stop: Optional[str]
 
 
 def request_openai_model(
@@ -21,7 +11,7 @@ def request_openai_model(
     temperature: float = 0.1,
     max_tokens: int = 1024,
     n: int = 1,
-    stop: str = None,
+    stop: Optional[str] = None,
 ):
 
     track.warning(
