@@ -27,6 +27,10 @@ This concept currently only applies to interpreted languages such as python and 
 
 Furthermore, fukkatsu introduces a method to enhance ordinary functions with the power of LLMs. By decorating ordinary functions with natural language prompts, they can now dynamically adapt to unforeseen inputs.
 
+## Medium post
+
+[fukkatsu — Dynamic Software Improvement and Mutation using LLMs for Stochastic Synthetic Code Injections](https://medium.com/@maxmekiska/fukkatsu-dynamic-software-improvement-and-mutation-using-llms-for-stochastic-synthetic-code-da2709338c3f?source=friends_link&sk=9bc01d1994af36a5a95d8e433f7f56c9)
+
 ## Quick Start
 
 ```python
