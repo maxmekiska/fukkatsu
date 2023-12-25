@@ -26,5 +26,5 @@ setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     keywords=["machinelearning", "llm", "runtime", "codecorrection"],
-    python_rquieres=">= 3.9.0, <= 3.11.0",
+    python_requires=">= 3.9.0, <= 3.11.0",
 )
