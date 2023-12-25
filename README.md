@@ -470,7 +470,6 @@ Added `active_memory` parameter to control the activation of the short term memo
   <summary>Expand</summary>
   <br>
 
-Work in progress
 
 This release will support Google's `gemini-pro` LLM. Each decorator will now support the google generative-ai SDK.
 

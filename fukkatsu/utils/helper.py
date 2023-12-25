@@ -37,6 +37,17 @@ def add_delimiters(message: str) -> str:
         return message + "|||"
 
 
+def remove_patterns(input_string):
+    pattern1 = r"\|\|\|"
+    pattern2 = r"```"
+
+    combined_pattern = f"{pattern1}|{pattern2}"
+
+    result_string = re.sub(combined_pattern, "", input_string)
+
+    return result_string
+
+
 def extract_text_between_pipes(message: str) -> str:
     message = standardize_delimiters(message)
     message = add_delimiters(message)
@@ -44,7 +55,9 @@ def extract_text_between_pipes(message: str) -> str:
     end_idx = message.rfind("|||")
     if start_idx == -1 or end_idx == -1 or start_idx >= end_idx:
         return ""
-    return message[start_idx:end_idx].strip()
+    message = message[start_idx:end_idx].strip()
+    cleaned_message = remove_patterns(message)
+    return cleaned_message
 
 
 def return_source_code(func: Callable) -> str:
