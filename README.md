@@ -464,7 +464,7 @@ Added `active_memory` parameter to control the activation of the short term memo
 
 </details>
 
-## fukkatsu 0.0.12 - `Making new Friends`
+## fukkatsu 0.0.13 - `Making new Friends`
 
 <details>
   <summary>Expand</summary>

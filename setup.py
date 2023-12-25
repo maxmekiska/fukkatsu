@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="fukkatsu",
-    version="0.0.12",
+    version="0.0.13",
     packages=find_packages(include=["fukkatsu", "fukkatsu.*"]),
     install_requires=[
         "openai >= 0.27.5, <= 0.28",
