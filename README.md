@@ -16,7 +16,7 @@ pip install fukkatsu
 
 ## API Keys
 
-fukkatsu requires the environmental variable `OPENAI_API_KEY` and/or `GOOGLE_API_KEY` set.
+fukkatsu requires the environmental variable `OPENAI_API_KEY` set.
 
 ## Description
 

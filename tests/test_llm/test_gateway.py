@@ -1,15 +1,14 @@
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
-from fukkatsu.llm.openaigate import request_openai_model
+from fukkatsu.llm.gateway import request_model
 
 
 @pytest.fixture
-def mock_openai_create():
-
-    with patch("fukkatsu.llm.openaigate.openai.ChatCompletion.create") as mock_create:
-        yield mock_create
+def mock_openai_client():
+    with patch("fukkatsu.llm.gateway.OpenAI") as mock_openai:
+        yield mock_openai
 
 
 @pytest.fixture
@@ -18,19 +17,21 @@ def mock_track_warning():
         yield mock_warning
 
 
-def test_request_openai_model(mock_openai_create, mock_track_warning):
+def test_request_model(mock_openai_client, mock_track_warning):
     set_prompt = "Test prompt"
-    model = "gpt-3.5-turbo"
+    model = "model"
     temperature = 0.1
     max_tokens = 1024
     n = 1
     stop = None
 
-    mock_openai_response = {"choices": [{"message": {"content": "Test response"}}]}
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="Test response"))]
 
-    mock_openai_create.return_value = mock_openai_response
+    mock_openai_instance = mock_openai_client.return_value
+    mock_openai_instance.chat.completions.create.return_value = mock_response
 
-    result = request_openai_model(
+    result = request_model(
         set_prompt=set_prompt,
         model=model,
         temperature=temperature,
@@ -39,11 +40,12 @@ def test_request_openai_model(mock_openai_create, mock_track_warning):
         stop=stop,
     )
 
-    mock_track_warning.assert_called_once_with(
+    mock_track_warning.assert_any_call(
         f"API REQUEST to {model} - Temperature: {temperature} - Max Tokens: {max_tokens} - N: {n} - Stop: {stop}"
     )
+    mock_track_warning.assert_any_call(mock_response)
 
-    mock_openai_create.assert_called_once_with(
+    mock_openai_instance.chat.completions.create.assert_called_once_with(
         model=model,
         messages=[
             {"role": "system", "content": set_prompt},

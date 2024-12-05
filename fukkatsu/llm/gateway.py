@@ -1,23 +1,27 @@
 from typing import Optional
 
-import openai
+from openai import OpenAI
 
 from fukkatsu.observer.tracker import track
 
 
-def request_openai_model(
+def request_model(
     set_prompt: str,
-    model: str = "gpt-3.5-turbo",
+    model: str = "meta-llama/llama-3.2-3b-instruct:free",
+    base_url: str = "https://openrouter.ai/api/v1",
     temperature: float = 0.1,
     max_tokens: int = 1024,
     n: int = 1,
     stop: Optional[str] = None,
 ):
+    client = OpenAI(
+        base_url=base_url,
+    )
 
     track.warning(
         f"API REQUEST to {model} - Temperature: {temperature} - Max Tokens: {max_tokens} - N: {n} - Stop: {stop}"
     )
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": set_prompt},
@@ -28,6 +32,8 @@ def request_openai_model(
         temperature=temperature,
     )
 
-    final_resoponse = response["choices"][0]["message"]["content"].strip()
+    track.warning(response)
+
+    final_resoponse = response.choices[0].message.content.strip()
 
     return final_resoponse

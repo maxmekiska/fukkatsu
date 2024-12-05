@@ -1,4 +1,4 @@
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 
 import copy
 import functools
@@ -20,8 +20,8 @@ def resurrect(
     additional_req: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    primary_model_api: str = "openai",
-    secondary_model_api: str = "openai",
+    primary_model_api: str = "gateway",
+    secondary_model_api: str = "gateway",
     primary_config: dict = {},
     secondary_config: dict = {},
     human_action: bool = False,
@@ -215,8 +215,8 @@ def mutate(
     request: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    primary_model_api: str = "openai",
-    secondary_model_api: str = "openai",
+    primary_model_api: str = "gateway",
+    secondary_model_api: str = "gateway",
     primary_config: dict = {},
     secondary_config: dict = {},
     human_action: bool = False,
@@ -303,8 +303,8 @@ def stalk(
     additional_req: str = "",
     allow_installs: bool = False,
     active_twin: bool = False,
-    primary_model_api: str = "openai",
-    secondary_model_api: str = "openai",
+    primary_model_api: str = "gateway",
+    secondary_model_api: str = "gateway",
     primary_config: dict = {},
     secondary_config: dict = {},
     human_action: bool = False,

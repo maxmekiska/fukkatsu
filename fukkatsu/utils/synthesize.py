@@ -1,7 +1,6 @@
 from typing import Any, Callable, Dict, Optional
 
-from fukkatsu.llm.googlegate import request_google_model
-from fukkatsu.llm.openaigate import request_openai_model
+from fukkatsu.llm.gateway import request_model
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    CONTEXT_STALKER, CONTEXT_TWIN,
@@ -10,8 +9,7 @@ from fukkatsu.utils.prompt import (ADDITIONAL, CONTEXT, CONTEXT_MUTATE,
                                    OUTPUT_CONSTRAINTS_TWIN)
 
 MODEL_API: Dict[str, Callable] = {
-    "openai": request_openai_model,
-    "google": request_google_model,
+    "gateway": request_model,
 }
 
 

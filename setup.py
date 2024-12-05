@@ -13,11 +13,10 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="fukkatsu",
-    version="0.0.13",
+    version="0.0.14",
     packages=find_packages(include=["fukkatsu", "fukkatsu.*"]),
     install_requires=[
-        "openai >= 0.27.5, <= 0.28",
-        "google-generativeai >= 0.3.1, <= 0.4.0"
+        "openai >= 1.56.0, <= 1.57.00",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.9",
