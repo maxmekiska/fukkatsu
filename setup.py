@@ -22,8 +22,9 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     keywords=["machinelearning", "llm", "runtime", "codecorrection"],
-    python_requires=">= 3.9.0, < 3.12.0",
+    python_requires=">= 3.9.0, < 3.13.0",
 )
