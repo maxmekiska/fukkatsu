@@ -71,8 +71,8 @@
 
 - added support for Google's `gemini-pro` LLM
 - removed env var helper functions `reset_openai_key`, `reset_google_key` for OPENAI and GOOGLE ENV vars, please set `OPENAI_API_KEY` and `GOOGLE_API_KEY` on your system or manage vars via:
-    - os.environ["OPENAI_API_KEY"] = "..." 
-    - os.environ["GOOGLE_API_KEY"] = "..." 
+    - os.environ["OPENAI_API_KEY"] = "..."
+    - os.environ["GOOGLE_API_KEY"] = "..."
 
 
 ### 0.0.13

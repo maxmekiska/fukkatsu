@@ -8,7 +8,7 @@ from fukkatsu import stalk
        allow_installs = False,
        active_twin = False,
        primary_model_api = "openai",
-       primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1}, 
+       primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1},
       )
 def my_function(x, y, z):
     """

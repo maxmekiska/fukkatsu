@@ -20,7 +20,7 @@ fukkatsu requires the environmental variable `OPENAI_API_KEY` set.
 
 ## Description
 
-This is a proof of concept for a library that will leverage LLMs to dynamically fix and improve code during execution. fukkatsu is the japanese word, `復活`, for "resurrection" or "revival". Metaphorically speaking, this library will attempt to fix your cars tire while you are driving it at 300 km/h. 
+This is a proof of concept for a library that will leverage LLMs to dynamically fix and improve code during execution. fukkatsu is the japanese word, `復活`, for "resurrection" or "revival". Metaphorically speaking, this library will attempt to fix your cars tire while you are driving it at 300 km/h.
 
 
 This concept currently only applies to interpreted languages such as python and not to compiled languages such as C++. The very nature of interpreted languages allows us to dynamically change the code during runtime.
@@ -53,10 +53,10 @@ def perform_data_transformation(data):
     """takes in list of date strings and transforms them into datetime objects.
     """
     date_format = '%Y-%m-%d'
-    
+
     for idx, date in enumerate(data):
         data[idx] = datetime.strptime(date, date_format)
-        
+
     return data
 
 if __name__ == "__main__":
@@ -66,9 +66,9 @@ if __name__ == "__main__":
           "2023.07.07", "2023-12-01",
           "2020/01/01", "Nov 11 1994"
           ]
-  
+
   transformed_data = perform_data_transformation(data)
-  
+
   transformed_data
 ```
 
@@ -106,7 +106,7 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 WARNING:root:Input arguments: {'x': 1, 'y': 0, 'z': 2}
 WARNING:root:
-Source Code: 
+Source Code:
  def my_function(x, y, z):
     """
     function to divide x by y and add to the result z. Should return z if y is 0.
@@ -143,7 +143,7 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 WARNING:root:Input arguments: {'x': 1, 'y': 0, 'z': 2}
 WARNING:root:
-Source Code: 
+Source Code:
  def my_function(x, y, z):
     """
     function to divide x by y and add to the result z. Should return z if y is 0.
@@ -186,7 +186,7 @@ def my_mutated_function(file_path: str) -> pd.DataFrame():
     function to read files and output a dataframes.
     """
     pd.read_csv(file_path)
-    
+
 my_mutated_function("test_file.xlsx")
 ```
 </details>
@@ -378,10 +378,10 @@ def perform_data_transformation(data:list):
     """takes in list of datestrings, transforms into datetime objects.
     """
     date_format = '%Y-%m-%d'
-    
+
     for idx, date in enumerate(data):
         data[idx] = datetime.strptime(date, date_format)
-        
+
     return data
 
 data = ["2023-07-07", "1 June 2020", "2023.07.07", "2023-12-01", "2020/01/01", "Nov 11 1994"]
@@ -391,7 +391,7 @@ data = ["2023-07-07", "1 June 2020", "2023.07.07", "2023-12-01", "2020/01/01", "
 class TestClass:
     def __init__(self):
         self.test = "test"
-        
+
     def test_wrapper_in_class(self, data: List):
         return perform_data_transformation(data)
 
@@ -424,7 +424,7 @@ def resurrect(
     primary_config: dict = {},
     secondary_config: dict = {},
     human_action: bool = False,
-    active_memory: bool = True,    
+    active_memory: bool = True,
 ):
   ...
 ```
@@ -489,9 +489,9 @@ def resurrect(
     primary_model_api: str = "openai",
     secondary_model_api: str = "google",
     primary_config = {"model": "gemini-pro", "temperature": 0.1},
-    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1}, 
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1},
     human_action: bool = True,
-    active_memory: bool = True,    
+    active_memory: bool = True,
 ):
   ...
 ```
@@ -516,7 +516,7 @@ from datetime import datetime
     primary_model_api = "google",
     secondary_model_api = "openai",
     primary_config = {"model": "gemini-pro", "temperature": 0.1},
-    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1}, 
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1},
     human_action = True,
     active_memory = True
 )
@@ -524,10 +524,10 @@ def perform_data_transformation(data):
     """takes in list of datestrings, transforms into datetime objects.
     """
     date_format = '%Y-%m-%d'
-    
+
     for idx, date in enumerate(data):
         data[idx] = datetime.strptime(date, date_format)
-        
+
     return data
 
 
@@ -789,8 +789,8 @@ Traceback (most recent call last):
 UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
 2023-06-22 00:16:37,705 - Input arguments: {'file_path': 'status_field.xlsx'}
 
-2023-06-22 00:16:37,705 - 
-Source Code: 
+2023-06-22 00:16:37,705 -
+Source Code:
  def read_file(file_path: str):
     """read file and return a data frame"""
     df = pd.read_csv(file_path)
@@ -1006,8 +1006,8 @@ Traceback (most recent call last):
 UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 15-16: invalid continuation byte
 2023-06-22 00:19:40,604 - Input arguments: {'file_path': 'status_field.xlsx'}
 
-2023-06-22 00:19:40,605 - 
-Source Code: 
+2023-06-22 00:19:40,605 -
+Source Code:
  def read_file(file_path: str):
     """read file and return a data frame"""
     df = pd.read_csv(file_path)
@@ -1170,8 +1170,8 @@ read_file(file_path)
 ```
 2023-06-22 00:30:25,589 - Input arguments: {'file_path': 'status_field.xlsx'}
 
-2023-06-22 00:30:25,590 - 
-Source Code: 
+2023-06-22 00:30:25,590 -
+Source Code:
  def read_file(file_path: str):
     """read file and return a data frame"""
     df = pd.read_csv(file_path)
@@ -1182,16 +1182,16 @@ Source Code:
 
 2023-06-22 00:30:25,592 - API REQUEST to gpt-3.5-turbo
 2023-06-22 00:30:31,373 - Received RAW suggestion mutation:
-||| 
+|||
 import pandas as pd
 
 def read_file(file_path: str):
     """
     Read file and return a data frame.
-    
+
     Args:
     file_path (str): The path of the file to be read.
-    
+
     Returns:
     pandas.DataFrame: The data frame containing the data from the file.
     """
@@ -1209,10 +1209,10 @@ def read_file(file_path: str):
 def read_file(file_path: str):
     """
     Read file and return a data frame.
-    
+
     Args:
     file_path (str): The path of the file to be read.
-    
+
     Returns:
     pandas.DataFrame: The data frame containing the data from the file.
     """
@@ -1231,10 +1231,10 @@ def read_file(file_path: str):
     import pandas as pd
     """
     Read file and return a data frame.
-    
+
     Args:
     file_path (str): The path of the file to be read.
-    
+
     Returns:
     pandas.DataFrame: The data frame containing the data from the file.
     """
@@ -1252,10 +1252,10 @@ def read_file(file_path: str):
     import pandas as pd
     """
     Read file and return a data frame.
-    
+
     Args:
     file_path (str): The path of the file to be read.
-    
+
     Returns:
     pandas.DataFrame: The data frame containing the data from the file.
     """
@@ -1307,8 +1307,8 @@ print(my_function(x = 1, y = 0, z= 2))
 2023-06-22 00:39:25,914 - Random number: 0.2695059864882857, Likelihood: 0.6
 2023-06-22 00:39:25,916 - Input arguments: {'x': 1, 'y': 0, 'z': 2}
 
-2023-06-22 00:39:25,918 - 
-Source Code: 
+2023-06-22 00:39:25,918 -
+Source Code:
  def my_function(x, y, z):
     """
     function to divide x by y and add to the result z. Should return z if y is 0.
@@ -1459,4 +1459,3 @@ def my_function(x, y, z):
 The above example will allow the LLM to attempt to fix the function twice. If the LLM fails to fix the function after two attempts, a `flatline error` will be raised which indicates that the LLM was not able to fix the function during runtime.
 
 </details>
-

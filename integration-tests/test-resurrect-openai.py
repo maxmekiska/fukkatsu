@@ -14,7 +14,7 @@ from datetime import datetime
     primary_model_api = "openai",
     secondary_model_api = "openai",
     primary_config = {"model": "gpt-3.5-turbo", "temperature": 0.01},
-    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.10}, 
+    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.10},
     human_action = False,
     active_memory = True
 )
@@ -22,10 +22,10 @@ def perform_data_transformation(data):
     """takes in list of datestrings, transforms into datetime objects.
     """
     date_format = '%Y-%m-%d'
-    
+
     for idx, date in enumerate(data):
         data[idx] = datetime.strptime(date, date_format)
-        
+
     return data
 
 

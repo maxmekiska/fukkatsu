@@ -22,10 +22,10 @@ def perform_data_transformation(data):
     """takes in list of datestrings, transforms into datetime objects.
     """
     date_format = '%Y-%m-%d'
-    
+
     for idx, date in enumerate(data):
         data[idx] = datetime.strptime(date, date_format)
-        
+
     return data
 
 

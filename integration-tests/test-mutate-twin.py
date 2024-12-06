@@ -12,7 +12,7 @@ file_path = "status_field_v2.csv"
         primary_model_api = "google",
         primary_config= {"model": "gemini-pro", "temperature": 0.2},
         secondary_model_api = "openai",
-        secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.2} 
+        secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.2}
         )
 def read_file(file_path: str):
     """read file and return a data frame"""
