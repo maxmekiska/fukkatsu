@@ -4,7 +4,7 @@ import copy
 import functools
 import traceback
 
-from fukkatsu.memory import SHORT_TERM_MEMORY
+from fukkatsu.memory.short import ShortMemory
 from fukkatsu.observer.tracker import track
 from fukkatsu.utils.helper import (check_and_install_libraries,
                                    extract_imports, extract_text_between_pipes,
@@ -13,6 +13,18 @@ from fukkatsu.utils.helper import (check_and_install_libraries,
                                    rename_function, return_input_arguments,
                                    return_source_code, sampler)
 from fukkatsu.utils.synthesize import defibrillate, enhance, stalker, twin
+
+SHORT_TERM_MEMORY = ShortMemory()
+
+
+def reset_memory() -> None:
+    track.warning(f"Resetting short term memory\n")
+    SHORT_TERM_MEMORY.delete()
+
+
+def peek_memory() -> None:
+    table = SHORT_TERM_MEMORY.show_table()
+    print(table)
 
 
 def resurrect(
@@ -50,9 +62,9 @@ def resurrect(
                 track.warning(f"Input arguments: {input_args}\n")
                 track.warning(f"\nSource Code: \n {source}\n")
 
-                if trace in SHORT_TERM_MEMORY.keys() and active_memory == True:
+                if SHORT_TERM_MEMORY.exists(trace) and active_memory == True:
                     track.warning("Correction already in-memory\n")
-                    suggested_code = SHORT_TERM_MEMORY[trace]
+                    suggested_code = SHORT_TERM_MEMORY.get_fix(trace)
                     track.warning(
                         f"Using in-memory saved correction:\n{suggested_code}\n"
                     )
@@ -119,7 +131,7 @@ def resurrect(
 
                         output = new_function(*args_copy, **kwargs_copy)
 
-                        SHORT_TERM_MEMORY[trace] = suggested_code
+                        SHORT_TERM_MEMORY.store_fix(trace, suggested_code)
                         track.warning(
                             f"Reanimation successful, using:\n{suggested_code}\n"
                         )
@@ -148,9 +160,9 @@ def resurrect(
                         trace = remove_trace_lines(trace)
                         track.warning("Reanimation failed, requesting new correction\n")
 
-                        if trace in SHORT_TERM_MEMORY.keys() and active_memory == True:
+                        if SHORT_TERM_MEMORY.exists(trace) and active_memory == True:
                             track.warning("Correction already in-memory\n")
-                            suggested_code = SHORT_TERM_MEMORY[trace]
+                            suggested_code = SHORT_TERM_MEMORY.get_fix(trace)
                             track.warning(
                                 f"Using in-memory saved correction:\n{suggested_code}\n"
                             )
@@ -390,3 +402,6 @@ def stalk(
         return wrapper
 
     return _stalk
+
+
+__all__ = ["reset_memory", "peek_memory", "resurrect", "mutate", "stalk"]

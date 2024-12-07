@@ -1,5 +1,3 @@
-import os
-
 from setuptools import find_packages, setup
 
 with open("README.md", encoding="utf8") as file:
@@ -17,14 +15,16 @@ setup(
     packages=find_packages(include=["fukkatsu", "fukkatsu.*"]),
     install_requires=[
         "openai >= 1.56.0, <= 1.57.00",
+        "lz4 >= 4.3.3, <= 4.4.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     keywords=["machinelearning", "llm", "runtime", "codecorrection"],
-    python_requires=">= 3.9.0, < 3.13.0",
+    python_requires=">= 3.9.0, < 3.14.0",
 )

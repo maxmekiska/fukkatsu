@@ -1,7 +1,7 @@
 import fukkatsu
 print(f"fukkatsu version running: {fukkatsu.__version__}")
 
-from fukkatsu import resurrect
+from fukkatsu import resurrect, reset_memory, peek_memory
 
 from datetime import datetime
 
@@ -10,10 +10,10 @@ from datetime import datetime
     lives=3,
     allow_installs = True,
     additional_req = "Ensure that all datestrings provided are transformed into datetime objects.",
-    active_twin = True,
+    active_twin = False,
     primary_model_api = "gateway",
     secondary_model_api="gateway",
-    primary_config = {"temperature": 0.01},
+    primary_config = {"temperature": 0.01, "model": "meta-llama/llama-3.1-8b-instruct:free"},
     secondary_config= {"temperature": 0.3 },
     human_action = False,
     active_memory = True
@@ -28,13 +28,21 @@ def perform_data_transformation(data):
 
     return data
 
+if __name__ == "__main__":
 
-data = [
-        "2023-07-07", "1 June 2020",
-        "2023.07.07", "2023-12-01",
-        "2020/01/01", "Nov 11 1994"
-        ]
+    data = [
+            "2023-07-07", "1 June 2020",
+            "2023.07.07", "2023-12-01",
+            "2020/01/01", "Nov 11 1994"
+            ]
 
-transformed_data = perform_data_transformation(data)
+    print("New Memory")
+    transformed_data = perform_data_transformation(data)
 
-print(transformed_data)
+    print(transformed_data)
+
+    print("Should use Memory")
+    transformed_data = perform_data_transformation(data)
+
+    print(transformed_data)
+

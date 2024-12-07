@@ -34,6 +34,9 @@ def request_model(
 
     track.warning(response)
 
-    final_resoponse = response.choices[0].message.content.strip()
+    if response.choices[0].message.content:
+        final_resoponse = response.choices[0].message.content.strip()
+    else:
+        response.choices[0].message.content
 
     return final_resoponse

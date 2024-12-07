@@ -2,8 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from fukkatsu import mutate, resurrect, stalk
-from fukkatsu.memory.manage import *
+from fukkatsu import mutate, reset_memory, resurrect, stalk
 
 suggested_code = """
 |||def my_function(x, y, z):

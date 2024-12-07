@@ -78,3 +78,9 @@
 ### 0.0.13
 
 - fixed setup python version 3.11. setup allows all python 3.11 versions which meet < 3.12
+
+### 0.0.14
+
+- support python3.12 and 3.13
+- generalized llm api - uses OpenAI api
+- short-term memory is now supported by sqlite
