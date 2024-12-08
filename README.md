@@ -44,10 +44,10 @@ from fukkatsu import resurrect
     allow_installs = True,
     additional_req = "Account for multiple date formats if necessary.",
     active_twin = True,
-    primary_model_api = "google",
-    secondary_model_api = "openai",
-    primary_config = {"model": "gemini-pro", "temperature": 0.01},
-    secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.10}
+    primary_model_api = "gateway",
+    secondary_model_api = "gateway",
+    primary_config = {"temperature": 0.01, "model": "meta-llama/llama-3.1-8b-instruct:free"},
+    secondary_config = {"temperature": 0.45, "model": "meta-llama/llama-3.1-8b-instruct:free"},
 )
 def perform_data_transformation(data):
     """takes in list of date strings and transforms them into datetime objects.
@@ -736,6 +736,39 @@ Proceed? [y/n]y
 </details>
 
 
+## fukkatsu 0.0.14 - `All In`
+
+<details>
+  <summary>Expand</summary>
+  <br>
+
+fukkatsu 0.0.14 now supports multiple llm providers by authenticating with OpenAI. You only need to provide the `OPENAI_API_KEY`. To improve performance, the short term memory implementation now uses sqlite.
+
+Set `primary_model_api` or `secondary_model_api` to `gateway`.You will now have access to `base_url` within `primary_config` & `secondary_config` which allows you to change your llm backend.Currently `base_url` is set to `https://openrouter.ai/api/v1`.
+
+### `resurrect example`
+```python
+def resurrect(
+    lives: int = 1,
+    additional_req: str = "",
+    allow_installs: bool = False,
+    active_twin: bool = True,
+    primary_model_api: str = "gateway",
+    secondary_model_api: str = "gateway",
+    primary_config = {"temperature": 0.01, "model": "meta-llama/llama-3.1-8b-instruct:free"},
+    secondary_config = {"temperature": 0.45, "model": "meta-llama/llama-3.1-8b-instruct:free"},
+    human_action: bool = True,
+    active_memory: bool = True,
+):
+  ...
+```
+
+
+</details>
+
+
+
+
 ## Samples - `Synthetic` Code in Action
 
 <details>
@@ -1383,8 +1416,6 @@ def my_function(x, y, z):
 
 
 </details>
-
-
 
 
 

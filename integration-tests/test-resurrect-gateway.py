@@ -1,7 +1,7 @@
 import fukkatsu
 print(f"fukkatsu version running: {fukkatsu.__version__}")
 
-from fukkatsu import resurrect, reset_memory, peek_memory
+from fukkatsu import resurrect
 
 from datetime import datetime
 
@@ -36,13 +36,5 @@ if __name__ == "__main__":
             "2020/01/01", "Nov 11 1994"
             ]
 
-    print("New Memory")
     transformed_data = perform_data_transformation(data)
-
     print(transformed_data)
-
-    print("Should use Memory")
-    transformed_data = perform_data_transformation(data)
-
-    print(transformed_data)
-

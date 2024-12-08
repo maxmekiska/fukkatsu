@@ -7,10 +7,10 @@ from fukkatsu import stalk
        additional_req = "",
        allow_installs = False,
        active_twin = True,
-       primary_model_api = "google",
-       secondary_model_api = "openai",
-       primary_config = {"model": "gemini-pro", "temperature": 0.1},
-       secondary_config = {"model": "gpt-3.5-turbo", "temperature": 0.1},
+       primary_model_api = "gateway",
+       secondary_model_api = "gateway",
+       primary_config = {"temperature": 0.01, "model": "meta-llama/llama-3.1-8b-instruct:free"},
+       secondary_config = {"temperature": 0.01, "model": "meta-llama/llama-3.1-8b-instruct:free"},
       )
 def my_function(x, y, z):
     """
